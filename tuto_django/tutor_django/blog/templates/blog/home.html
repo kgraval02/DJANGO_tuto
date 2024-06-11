@@ -1,9 +1,14 @@
 {% extends "blog/base.html" %}
 {% block content %}
-    {% for post in posts %}
-        <h1>{{ post.title }}</h1>
-        <h2>Written by : {{ post.author }}</h2>
-        <p>Published on : {{ post.date_publishes }}</p>
-        <p>{{ post.content }}</p>
-    {% endfor %}
+    <div class="d-flex flex-wrap m-4 justify-content-center">
+        {% for post in posts %}
+        <div class="col-md-5 alternate-bg rounded-right rounded-bottom m-4">
+            <h1 class="mx-3 my-1 px-3 py-1">{{ post.title }}</h1>
+            <h6 class="mx-3 mb-2 px-3 pb-2">Written by : {{ post.author }}</h6>
+            <hr style="width: 90%; justify-content: center; margin: auto">
+            <p class="mx-3 mb-0 px-3 pt-2">Published on : {{ post.date_posted|date:"F d, Y" }}</p>
+            <p class="mx-3 mt-0 px-3 py-3">{{ post.content }}</p>
+        </div>
+        {% endfor %}
+    </div>
 {% endblock content %}

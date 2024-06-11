@@ -1,0 +1,6 @@
+.alternate-bg {
+    background-color: rgba(224, 224, 224, 0.76);
+}
+.alternate-bg:nth-of-type(odd) {
+    background-color: white;
+}
