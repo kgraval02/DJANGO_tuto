@@ -1,0 +1,24 @@
+<!--    <title>User Registration</title>-->
+
+{% extends "blog/base.html" %}
+{% block content %}
+    <div class="content-section">
+        <h1>User registration page</h1>
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group">
+                <legend class="border-bottom mb-3">JOIN TODATY</legend>
+                {{ form.as_p }}
+            </fieldset>
+<!--            <br><br><br>-->
+            <div class="form-group btn-group-toggle" data-toggle="buttons">
+                <button class="btn btn-primary"  type="submit">SIGN UP</button>
+            </div>
+            <div class="border-top pt-3">
+                <small class="text-muted text-primary">
+                    Already having account ? <a class="ml-2" href="#">SIGN IN</a>
+                </small>
+            </div>
+        </form>
+    </div>
+{% endblock content %}
