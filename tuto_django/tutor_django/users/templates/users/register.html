@@ -1,6 +1,6 @@
 <!--    <title>User Registration</title>-->
-
 {% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
 {% block content %}
     <div class="content-section">
         <h1>User registration page</h1>
@@ -10,7 +10,7 @@
                 <legend class="border-bottom mb-3">JOIN TODATY</legend>
                 {{ form.as_p }}
             </fieldset>
-<!--            <br><br><br>-->
+            <!--            <br><br><br>-->
             <div class="form-group btn-group-toggle" data-toggle="buttons">
                 <button class="btn btn-primary"  type="submit">SIGN UP</button>
             </div>
@@ -22,3 +22,4 @@
         </form>
     </div>
 {% endblock content %}
+<!--{{ form|crispy }}-->
