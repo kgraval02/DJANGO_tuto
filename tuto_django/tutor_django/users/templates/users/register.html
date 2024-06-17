@@ -16,10 +16,12 @@
             </div>
             <div class="border-top pt-3">
                 <small class="text-muted text-primary">
-                    Already having account ? <a class="ml-2" href="#">SIGN IN</a>
+                    Already having account ? <a class="ml-2" href="{% url 'login' %}">SIGN IN</a>
+
                 </small>
             </div>
         </form>
     </div>
 {% endblock content %}
-<!--{{ form|crispy }}-->
+<!--                {{ form.as_p }}-->
+<!--                {{ form|crispy }}-->
