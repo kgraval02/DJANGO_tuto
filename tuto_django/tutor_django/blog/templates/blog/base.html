@@ -27,16 +27,22 @@
 
             <div class="dropdown text-end">
               <a href="#" class="d-block link-body-emphasis text-decoration-none dropdown-toggle" data-bs-toggle="dropdown" aria-expanded="false">
-                <img src="https://github.com/mdo.png" alt="mdo" width="32" height="32" class="rounded-circle">
+                  <img src="{{ user.profile.image.url }}" alt="mdo" width="32" height="32" class="rounded-circle">
               </a>
               <ul class="dropdown-menu text-small">
                 <li><a href="#" class="nav-link px-2 link-body-emphasis">Add blog</a></li>
-                <li><a href="#" class="nav-link px-2 link-body-emphasis">Profile</a></li>
+                <li><a href="{% url 'profile' %}" class="nav-link px-2 link-body-emphasis">Profile</a></li>
                 <li><hr></li>
-                <li><a href="{% url 'logout' %}" class="nav-link px-2 link-body-emphasis">Log out</a></li>
+<!--                <li><a href="{% url 'logout' %}" class="nav-link px-2 link-body-emphasis">Log out</a></li>-->
+                <li>
+                    <form action="{% url 'logout' %}" method="post">
+                        {% csrf_token %}
+                        <button type="submit">Logout</button>
+                    </form>
+                    <!--                    <a href="{% url 'logout' %}" class="nav-link px-2 link-body-emphasis">Log out</a>-->
+                </li>
               </ul>
             </div>
-
         {% else %}
             <ul class="nav col-12 col-lg-auto me-lg-auto mb-2 justify-content-center mb-md-0">
 <!--          <li><a href="{% url 'blog_home' %}" class="nav-link px-2 link-secondary">Home</a></li>-->
