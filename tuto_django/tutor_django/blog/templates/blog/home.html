@@ -5,19 +5,16 @@
             <div class="col-md-5 alternate-bg rounded-right rounded-bottom m-4">
                 <div class="d-flex justify-content-around py-lg-3">
                     <div>
-                        <div class="mx-3 my-1 px-3 py-1">
-                            {{ post.title }}
-                        </div>
-                        <div class="mx-3 my-1 px-3 py-1">
-                            Written by : {{ post.author }}
-                        </div>
+                        <div class="mx-3 my-1 px-3 py-1 text-info">{{ post.author }}</div>
+                        <div class="mx-3 my-1 px-3 py-1">{{ post.title }}</div>
                     </div>
-
                     <img class="rounded-circle" src="{{ post.author.profile.image.url }}" height="70px" width="70px">
                 </div>
 
                 <hr style="width: 90%; justify-content: center; margin: auto">
                 <p class="mx-3 mb-0 px-3 pt-2">Published on : {{ post.date_posted|date:"F d, Y" }}</p>
+                <hr style="width: 90%; justify-content: center; margin: auto">
+                <h4 class="mx-3 mt-0 px-3 pt-3">CONTENT : </h4>
                 <p class="mx-3 mt-0 px-3 py-3">{{ post.content }}</p>
         </div>
         {% endfor %}

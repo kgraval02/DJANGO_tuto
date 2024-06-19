@@ -1,4 +1,4 @@
-<!--    <title>User Registration</title>-->
+    <!--    <title>User Registration</title>-->
 {% extends "blog/base.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
@@ -6,9 +6,9 @@
         <h1>User registration page</h1>
         <form method="POST">
             {% csrf_token %}
-            <fieldset class="form-group">
-                <legend class="border-bottom mb-3">JOIN TODATY</legend>
-                {{ form.as_p }}
+            <fieldset class="form-group container">
+                <legend class="border-bottom mb-3">JOIN TODAY</legend>
+                {{ form|crispy }}
             </fieldset>
             <!--            <br><br><br>-->
             <div class="form-group btn-group-toggle" data-toggle="buttons">
@@ -23,5 +23,4 @@
         </form>
     </div>
 {% endblock content %}
-<!--                {{ form.as_p }}-->
-<!--                {{ form|crispy }}-->
+{#                {{ form.as_p }}#}
