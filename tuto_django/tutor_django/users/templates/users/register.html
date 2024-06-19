@@ -10,17 +10,15 @@
                 <legend class="border-bottom mb-3">JOIN TODAY</legend>
                 {{ form|crispy }}
             </fieldset>
-            <!--            <br><br><br>-->
             <div class="form-group btn-group-toggle" data-toggle="buttons">
                 <button class="btn btn-primary"  type="submit">SIGN UP</button>
             </div>
             <div class="border-top pt-3">
                 <small class="text-muted text-primary">
                     Already having account ? <a class="ml-2" href="{% url 'login' %}">SIGN IN</a>
-
                 </small>
             </div>
         </form>
     </div>
+    <br><br><br>
 {% endblock content %}
-{#                {{ form.as_p }}#}

@@ -14,7 +14,7 @@
                     <h4 class="px-3 mx-4 py-3 bg-light">USER NAME : <span class="text-success ">{{ user.username }}</span>  </h4>
                     <h6 class="px-3 mx-4 py-3 bg-light">USER MAIL-ID : <span class="text-success ">{{ user.email }}</span>  </h6>
                     <h6 class="px-3 mx-4 py-3 bg-light">USER PROFILE : <span class="text-success ">Programmer</span>
-                     <a href="https://getbootstrap.com/">bootstrap.com</a></p>
+                     <a href="https://getbootstrap.com/">bootstrap.com</a>
                     </h6>
                     <div class="mb-4 pb-2">
                       <button type="button"  data-mdb-button-init="" data-mdb-ripple-init="" class="btn btn-outline-primary btn-floating" data-mdb-button-initialized="true">
@@ -38,8 +38,8 @@
                       {% csrf_token %}
                       <fieldset class="form-group">
                           <legend class="border-bottom mb-3">PROFILE INFORMATION</legend>
-                          {{ u_form.as_p }}
-                          {{ p_form.as_p }}
+                          {{ u_form|crispy }}
+                          {{ p_form|crispy }}
                       </fieldset>
                       <div class="form-group btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
                           <button class="btn btn-primary "  type="submit">UPDATE</button>
@@ -50,5 +50,3 @@
         </section>
     </div>
 {% endblock content %}
-<!--{{ u_form|crispy }}-->
-<!--{{ p_form|crispy }}-->
