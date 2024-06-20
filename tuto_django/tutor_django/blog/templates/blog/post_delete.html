@@ -1,0 +1,29 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <h1>Delete Post</h1>
+        <hr class="text-muted" style="height:2px;color:gray;background-color:gray"><hr class="hr hr-blurry"  />
+        <div class="container content-section card p-4">
+            <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group container">
+                    <h3>Do you confirm to delete post : '{{ object.title }}' ??</h3>
+                    <div class="row form-group btn-group-toggle pt-2"  data-toggle="buttons">
+                        <div class="col">
+                            <i class="fa fa-info-circle" aria-hidden="true"  data-toggle="tooltip" data-placement="right" title="DELETE CONFIRMATION">
+                                DELETE CONFIRMATION</i>
+                        </div>
+                        <div class="col">
+                            <button class="btn btn-danger"  type="submit">Yes, DELETE</button>
+                        </div>
+                        <div class="col">
+                            <a class="btn btn-secondary" href="{% url 'post_detail' object.id %}">CANCEL</a>
+                        </div>
+                    </div>
+                </fieldset>
+            </form>
+        </div>
+    </div>
+    <br><br><br>
+{% endblock content %}

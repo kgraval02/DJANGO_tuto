@@ -1,0 +1,33 @@
+{% extends "blog/base.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="content-section">
+        <p> {{request.get_full_path}} </p>
+        {% if request.get_full_path == '/post/new/' %}
+            <h1>Add Post Here...</h1>
+        {% elif request.get_full_path == '/post/{{object.id}}/update/' %}
+            <p> {{object.id}} </p>
+            <p> /post/{{object.id}}/update/ </p>
+            <h1>Update Post...</h1>
+        {% else %}
+            <h1>NO Update NO ADD</h1>
+        {% endif %}
+        <hr class="text-muted" style="height:2px;color:gray;background-color:gray"><hr class="hr hr-blurry"  />
+        <form method="POST">
+            {% csrf_token %}
+            <fieldset class="form-group container">
+                {{ form|crispy }}
+            </fieldset>
+            {% if request.get_full_path == '/post/new/' %}
+                <div class="form-group btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
+                    <button class="btn btn-primary"  type="submit">ADD</button>
+                </div>
+            {% else %}
+                <div class="form-group btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
+                    <button class="btn btn-primary"  type="submit">UPDATE</button>
+                </div>
+            {% endif %}
+        </form>
+    </div>
+    <br><br><br>
+{% endblock content %}

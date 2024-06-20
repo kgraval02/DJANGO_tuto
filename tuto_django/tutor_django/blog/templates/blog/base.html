@@ -30,7 +30,7 @@
                   <img src="{{ user.profile.image.url }}" alt="mdo" width="32" height="32" class="rounded-circle">
               </a>
               <ul class="dropdown-menu text-small">
-                <li><a href="#" class="nav-link px-2 link-body-emphasis">Add blog</a></li>
+                <li><a href="{% url 'post_create' %}" class="nav-link px-2 link-body-emphasis">Add blog</a></li>
                 <li><a href="{% url 'profile' %}" class="nav-link px-2 link-body-emphasis">Profile</a></li>
                 <li><hr></li>
 <!--                <li><a href="{% url 'logout' %}" class="nav-link px-2 link-body-emphasis">Log out</a></li>-->

@@ -8,14 +8,17 @@
             {% csrf_token %}
             <fieldset class="form-group container">
                 <legend class="border-bottom mb-3">JOIN TODAY</legend>
-                {{ form|crispy }}
+                <div class="container px-3 mx-2">
+                    {{ form|crispy }}
+                </div>
             </fieldset>
-            <div class="form-group btn-group-toggle" data-toggle="buttons">
+            <div class="form-group btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
                 <button class="btn btn-primary"  type="submit">SIGN UP</button>
             </div>
+            <br>
             <div class="border-top pt-3">
-                <small class="text-muted text-primary">
-                    Already having account ? <a class="ml-2" href="{% url 'login' %}">SIGN IN</a>
+                <small class="text-muted rounded text-light bg-info p-3 m-3 ">
+                    Already having account ? <a class="ml-2 bg-warning p-1 rounded" href="{% url 'login' %}">SIGN IN</a>
                 </small>
             </div>
         </form>
