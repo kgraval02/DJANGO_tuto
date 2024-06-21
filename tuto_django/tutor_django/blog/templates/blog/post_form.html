@@ -3,9 +3,16 @@
 {% block content %}
     <div class="content-section">
         <p> {{request.get_full_path}} </p>
+        <p> /post/{{ object.id }}/update/ </p>
+        {% if request.get_full_path == '/post/int({{object.id}})/update/' %}
+            <p> these both are equal </p>
+            <p> {{object.id}} </p>
+            <p> /post/{{ object.id }}/update/ </p>
+        {% endif %}
+
         {% if request.get_full_path == '/post/new/' %}
             <h1>Add Post Here...</h1>
-        {% elif request.get_full_path == '/post/{{object.id}}/update/' %}
+        {% elif request.get_full_path == '/post/str{{object.id}})/update/' %}
             <p> {{object.id}} </p>
             <p> /post/{{object.id}}/update/ </p>
             <h1>Update Post...</h1>
