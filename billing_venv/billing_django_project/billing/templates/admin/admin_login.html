@@ -1,0 +1,31 @@
+    {% extends "users/base_html.html" %}
+    {% load crispy_forms_tags %}
+    {% block content %}
+        <div class="m-2 p-2 card" >
+            <div class="content-section">
+                <h1 class="p-2">Admin Login page</h1>
+                <form method="POST">
+                    {% csrf_token %}
+                    <fieldset class="form-group container">
+                        <legend class="border-bottom mb-3"></legend>
+                        <div class="container px-3 mx-2">
+                          <div class="input-group mb-3">
+                            <input type="text" name="username" class="form-control py-4" placeholder="UserName">
+                          </div>
+                          <div class="input-group mb-3">
+                            <input type="password" name="password" class="form-control py-4" placeholder="Password">
+                          </div>
+                        <div class="form-group btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
+                            <button class="btn btn-primary"  type="submit">LOG IN</button>
+                        </div>
+                    </fieldset>
+                    <br>
+                </form>
+
+            </div>
+        </div>
+
+        <br><br><br>
+    {% endblock content %}
+
+

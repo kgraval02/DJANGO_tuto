@@ -21,3 +21,13 @@ kashyapg262002@gmail.com
 
 pass
 pass_1@use1
+
+------------
+name
+user2_quickcart
+
+id
+kashyapg262002@gmail.com
+
+pass
+pass_2@use2

@@ -1,0 +1,22 @@
+{% extends "main_product.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div>
+        <H1 class="p-2"><b>ADD PRODUCT PAGE</b></H1>
+        <form method="POST">
+                {% csrf_token %}
+                <fieldset class="form-group container">
+                    <legend class="border-bottom mb-3"></legend>
+                    <div class="container px-3 mx-2">
+                        {{ form|crispy }}
+                    </div>
+                </fieldset>
+                <div class="form-group btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
+                    <button class="btn btn-primary"  type="submit">SUBMIT</button>
+                </div>
+                <br>
+                <div class="border-top pt-3"></div>
+        </form>
+
+    </div>
+{% endblock content %}
