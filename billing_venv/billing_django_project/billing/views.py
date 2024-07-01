@@ -3,6 +3,8 @@ from django.contrib import messages
 from django.http import HttpResponse
 from .forms import UserRegisterForm
 
+def about(request):
+    return render(request,template_name='about.html', context={'title': 'About Page - QUICK CART HUB'})
 
 def home(request):
     data_context = {
@@ -27,3 +29,4 @@ def register(request):
         'form': form,
     }
     return render(request, 'users/register.html', data_context)
+

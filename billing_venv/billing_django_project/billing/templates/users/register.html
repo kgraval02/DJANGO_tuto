@@ -12,15 +12,15 @@
                         {{ form|crispy }}
                     </div>
                 </fieldset>
-                <div class="form-group btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
+                <div class="form-group pb-2 btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
                     <button class="btn btn-primary"  type="submit">SIGN UP</button>
                 </div>
-                <br>
-                <div class="border-top pt-3">
-    {#                <small class="text-muted rounded text-light bg-info p-3 m-3 ">#}
-    {#                    Already having account ? <a class="ml-2 bg-warning p-1 rounded" href="{% url 'login' %}">SIGN IN</a>#}
-    {#                </small>#}
+                <div class="border-top pt-3 d-flex justify-content-end">
+                    <small class="text-muted pt-2 rounded text-light bg-info p-3 m-3 ">
+                        Already having account ? <a class="ml-2 bg-warning p-1 rounded" href="{% url 'user_login2' %}">SIGN IN</a>
+                    </small>
                 </div>
+                <br>
             </form>
         </div>
     </div>

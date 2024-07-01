@@ -18,12 +18,13 @@
                 <br>
                 <div class="border-top pt-3">
     {#                <small class="text-muted rounded text-light bg-info p-3 m-3 ">#}
-    {#                    Already having account ? <a class="ml-2 bg-warning p-1 rounded" href="{% url 'login' %}">SIGN IN</a>#}
     {#                </small>#}
                 </div>
-                <div class="m-4 btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
+                <div class="m-4 btn-group-toggle d-flex justify-content-between" data-toggle="buttons">
                     <button class="btn btn-light text-muted" >
                         Forgoten password ?? <a class="text-decoration-none" href="#"> CLICK HERE </a></button>
+                    <button class="btn btn-light text-muted" >
+                        Don't have account ?? <a class="text-decoration-none" href="{% url 'register' %}"> CREATE FROM HERE </a></button>
                 </div>
             </form>
 
