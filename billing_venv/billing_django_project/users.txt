@@ -1,4 +1,3 @@
-
 admin
 ==+==+==+==+==+==+==+
 name 
@@ -9,7 +8,6 @@ admin1_quick@quick.com
 
 pass
 pass_1@adm1
-
 
 user
 ==+==+==+==+==+==+==+
@@ -31,3 +29,23 @@ kashyapg262002@gmail.com
 
 pass
 pass_2@use2
+
+------------
+name
+user3_quickcart
+
+id
+kashyapg262002@gmail.com
+
+pass
+pass_3@use3
+
+------------
+name
+user4_quickcart
+
+id
+kashyapg262002@gmail.com
+
+pass
+pass_4@use4

@@ -1,11 +1,7 @@
-# from django.core.checks import messages
 from django.contrib.auth.mixins import LoginRequiredMixin, UserPassesTestMixin
-from django.shortcuts import render, redirect
 from django.urls import reverse
-from pyexpat.errors import messages
 from .models import Category, Product
-from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView
-# ,Feedback
+from django.views.generic import ListView, DetailView, CreateView, UpdateView, DeleteView   # ,Feedback
 
 # category
 class Add_category(LoginRequiredMixin, CreateView):
@@ -30,19 +26,20 @@ class Edit_category(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-
-    # def test_func(self):
-    #     if self.request.user == is_staff:
-    #         return True
-
+    def test_func(self):
+        return self.request.user.is_superuser
+    def get_success_url(self):
+        return reverse('view_cate')
 
 class Delete_category(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Category
     success_url = 'view_cate'
 
-    # def test_func(self):
-    #     if self.request.user == is_staff:
-    #         return True
+    def test_func(self):
+        return self.request.user.is_superuser
+
+    def get_success_url(self):
+        return reverse('view_cate')
 
 # product
 class Add_product(LoginRequiredMixin, CreateView):
@@ -61,6 +58,8 @@ class View_product(ListView):
 
 class Product_detail(DetailView):
     model = Product
+    template_name = 'product/detail_product.html'
+    context_object_name = 'product_detail'
 
 class Edit_product(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     model = Product
@@ -68,12 +67,14 @@ class Edit_product(LoginRequiredMixin, UserPassesTestMixin, UpdateView):
     def form_valid(self, form):
         form.instance.author = self.request.user
         return super().form_valid(form)
-
-    # def test_func(self):
-    #     if self.request.user == is_staff:
-    #         return True
-
-
+    def test_func(self):
+        return self.request.user.is_superuser
+    def get_success_url(self):
+        return reverse('view_prdt')
 class Delete_product(LoginRequiredMixin, UserPassesTestMixin, DeleteView):
     model = Product
     success_url = 'view_prdt'
+    def get_success_url(self):
+        return reverse('view_prdt')
+    def test_func(self):
+        return self.request.user.is_superuser

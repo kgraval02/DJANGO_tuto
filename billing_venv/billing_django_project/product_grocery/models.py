@@ -11,7 +11,7 @@ class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100, null=True, blank=True)
     manufacturer = models.CharField(max_length=100, null=True, blank=True)
-    image = models.FileField(null=True, blank=True)
+    image = models.FileField(null=True, blank=True, upload_to='product_grocery/static/images/')
     description = models.TextField(null=True, blank=True)
     price = models.CharField(max_length=100, null=True, blank=True)
     discount = models.CharField(max_length=100, null=True, blank=True)

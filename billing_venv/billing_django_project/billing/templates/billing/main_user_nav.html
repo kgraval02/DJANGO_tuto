@@ -20,41 +20,18 @@
             <a href="{% url 'dashboard_admin' %}" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
               <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>DASHBOARD</span>
             </a>
-              <HR>
-{#              manage categpry#}
-              <div>MANAGE CATEGORY
-                <a href="{% url 'add_cate' %}" class="list-group-item list-group-item-action py-2 ripple">
-                  <i class="fas fa-chart-area fa-fw me-3"></i><span>ADD CATEGORY</span>
-                </a>
-                <a href="{% url 'view_cate' %}" class="list-group-item list-group-item-action py-2 ripple">
-                    <i class="fas fa-chart-area fa-fw me-3"></i><span>UPDATE CATEGORY</span>
-                </a>
-              <a href="{% url 'view_cate' %}" class="list-group-item list-group-item-action py-2 ripple">
-                  <i class="fas fa-chart-area fa-fw me-3"></i><span>DELETE CATEGORY</span>
-                </a></div>
-              {#manage product#}
-              <div class="pt-3">MANAGE PRODUCT
-                <a href="{% url 'add_prdt' %}#" class="list-group-item list-group-item-action py-2 ripple">
-                  <i class="fas fa-chart-area fa-fw me-3"></i><span>ADD PRODUCT</span>
-                </a>
-                <a href="{% url 'view_prdt' %}" class="list-group-item list-group-item-action py-2 ripple">
-                    <i class="fas fa-chart-area fa-fw me-3"></i><span>UPDATE PRODUCT</span>
-                </a>
-              <a href="{% url 'view_prdt' %}" class="list-group-item list-group-item-action py-2 ripple">
-                  <i class="fas fa-chart-area fa-fw me-3"></i><span>DELETE PRODUCT</span>
-                </a></div>
-
-{#                manage user#}
-              <div CLASS="pt-3">MANAGE USERS
-                <a href="{% url 'register' %}" class="list-group-item list-group-item-action py-2 ripple">
-                  <i class="fas fa-chart-area fa-fw me-3"></i><span>ADD USER</span>
-                </a>
-                <a href="{% url 'user_view' %}" class="list-group-item list-group-item-action py-2 ripple">
-                    <i class="fas fa-chart-area fa-fw me-3"></i><span>APPROVE USER</span>
-                </a>
-              <a href="{% url 'user_view' %}" class="list-group-item list-group-item-action py-2 ripple">
-                  <i class="fas fa-chart-area fa-fw me-3"></i><span>DELETE USER</span>
-                </a></div>
+            <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+              <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>VIEW CATEGORY</span>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action py-2 ripple">
+              <i class="fas fa-chart-area fa-fw me-3"></i><span>MANAGE PRODUCTS</span>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+              <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>MANAGE USER</span>
+            </a>
+            <a href="#" class="list-group-item list-group-item-action py-2 ripple">
+              <i class="fas fa-chart-area fa-fw me-3"></i><span></span>
+            </a>
 
           </div>
         </div>
@@ -69,7 +46,7 @@
                 <img src="https://th.bing.com/th/id/OIP.dyH31_g1X78x4tpXsMoK6QHaF7?rs=1&amp;pid=ImgDetMain" height="25"
                      alt="quick cart hub" loading="lazy"/>
             </a>
-            <a>
+            <a href="{% url 'logout' %}">
                 <button class="btn-primary " data-mdb-button-init class="navbar-toggler" type="button" data-mdb-collapse-init
                         data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
                         aria-label="Toggle navigation">LOGOUT</button>

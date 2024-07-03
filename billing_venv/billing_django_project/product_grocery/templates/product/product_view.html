@@ -1,20 +1,37 @@
 {% extends "main_product.html" %}
 {% block content %}
-    <div class="pt-3" >
-        <P> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad alias consequuntur error hic magni molestias, officiis placeat quia
-            tenetur veniam! </P>
-        <P> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad alias consequuntur error hic magni molestias, officiis placeat quia
-            tenetur veniam! </P>
-        <P> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad alias consequuntur error hic magni molestias, officiis placeat quia
-            tenetur veniam! </P>
-        <P> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad alias consequuntur error hic magni molestias, officiis placeat quia
-            tenetur veniam! </P>
-        <P> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad alias consequuntur error hic magni molestias, officiis placeat quia
-            tenetur veniam! </P>
-        <P> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad alias consequuntur error hic magni molestias, officiis placeat quia
-            tenetur veniam! </P>
-        <P> Lorem ipsum dolor sit amet, consectetur adipisicing elit. Ad alias consequuntur error hic magni molestias, officiis placeat quia
-            tenetur veniam! </P>
-    </div>
+    <h1><b> VIEW PRODUCT </b></h1><hr>
+    <div class="py-3" style="width: 100%">
+            <hr class="border-top-2">
+            <table class="table">
+              <thead><tr>
+                  <th scope="col">#</th>
+                  <th scope="col">NAME</th>
+                  <th scope="col">PRICE OF PRODUCT</th>
+                  <th scope="col">DISCOUNT</th>
+                  <th scope="col">PRODUCT CATEGORY</th>
+                  <th scope="col">PRODUCT DESCRIPTION</th>
+                  <th scope="col">PRODUCT MANUFACTURER</th>
+                  <th scope="col">PRODUCT IMAGE</th>
+                </tr></thead>
 
+            {% for P in product %}
+                <p class="text-light">{{ product.image.url }}</p>
+                <tbody>
+                    <tr class="table-active">
+                      <th scope="row"> 1 </th>
+                        <td>
+                            <a class="text-decoration-none text-dark" href="{% url 'view_detail_prdt' P.id %}">{{ P.name }}</a>
+                        </td>
+                        <td>{{ P.price }}</td>
+                        <td>{{ P.discount }}</td>
+                        <td>{{ P.category }}</td>
+                      <td>{{ P.description }}</td>
+                      <td>{{ P.manufacturer }}</td>
+                      <td><img src="{{ product.image.url }}" alt="no img found" height="100px" width="100px"></td>
+                    </tr>
+                </tbody>
+        {% endfor %}
+            </table>
+    </div>
 {% endblock %}

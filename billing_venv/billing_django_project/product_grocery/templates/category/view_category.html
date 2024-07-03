@@ -2,11 +2,17 @@
 {% load crispy_forms_tags %}
 {% block content %}
     <div>
-        <p>VIEW CATEGORY PAGE</p>
-
-        {% for item in Category %}
-            <p>name of category : {{ item.name }}</p>
-        {% endfor %}
-
+        <h1><b>VIEW CATEGORY PAGE</b></h1><hr>
+        <div class="py-3">
+            <ul>
+                {% for c in cate %}
+                    <div class="py-3 d-flex justify-content-between">
+                        <li><a class="text-decoration-none text-dark" href="#">{{ c.name }}</a></li>
+                        <a href="{% url 'update_cate' c.id %}"><button class="btn btn-light"> EDIT </button></a>
+                        <a href="{% url 'delete_cate' c.id %}"><button class="btn btn-light"> DELETE </button></a>
+                    </div>
+                {% endfor %}
+            </ul>
+        </div>
     </div>
 {% endblock content %}
