@@ -1,14 +1,11 @@
+import json
 from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from django.contrib import messages
-from django.views import View
-from product_grocery.models import Product
 from .forms import UserRegisterForm, UserUpdateForm, ProfileUpdateForm
-from django.db import models
-from django.contrib import admin
-from django.contrib.auth.admin import UserAdmin as BaseUserAdmin
 from django.contrib.auth.models import User
+from .models import CollectionCart
+from product_grocery.models import Product
 
 def admin_login(request):
     msg = None
@@ -60,60 +57,64 @@ def register(request):
     }
     return render(request, 'users/register.html', data_context)
 
-# @login_required
-# def profile(request):
-#     if request.method == 'POST':
-#         u_form = UserUpdateForm(request.POST, instance=request.user)
-#         p_form = ProfileUpdateForm(request.POST, request.FILES, instance=request.user.profile)
-#         if u_form.is_valid() and p_form.is_valid():
-#             u_form.save()
-#             p_form.save()
-#             messages.success(request, f'Your account has been updated!')
-#             return redirect('user_profile')
-#
-#     else:
-#         u_form = UserUpdateForm(instance=request.user)
-#         p_form = ProfileUpdateForm(instance=request.user.profile)
-#     context = {'u_form': u_form, 'p_form': p_form, 'title' : 'user profile page'}
-#
-#     return render(request, template_name='users/profile.html', context=context)
-
 def admin_dashboard(request):
     context = {
         'title': 'ADMIN - DASHBOARD'
     }
     return render(request, 'admin/dashboard_admin.html', context)
 
-# def admin_user_view(request):
-#     return render(request,template_name='admin/view_users.html', context={'title': 'Users - QUICK CART HUB'})
-
-# Define a new UserAdmin class
-# class admin_user_view   (BaseUserAdmin):
-#     # Define fields to display in the admin list view
-#     list_display = ('username', 'email', 'first_name', 'last_name', 'is_staff')
-#
-#     # Add filters for the admin list view
-#     list_filter = ('is_staff', 'is_superuser', 'is_active')
-#
-#     # Add search fields for the admin list view
-#     search_fields = ('username', 'email', 'first_name', 'last_name')
-#
-#     # Define fieldsets to organize the detail view of a user
-#     fieldsets = (
-#         (None, {'fields': ('username', 'password')}),
-#         ('Personal Info', {'fields': ('first_name', 'last_name', 'email')}),
-#         ('Permissions', {'fields': ('is_active', 'is_staff', 'is_superuser', 'groups', 'user_permissions')}),
-#         ('Important dates', {'fields': ('last_login', 'date_joined')}),
-#     )
-#
-#     # Customize ordering of users in the admin list view
-#     ordering = ('username',)
-
-# Re-register UserAdmin
-# admin.site.unregister(User)
-# admin.site.register(User, UserAdmin)
-
 def admin_user_view(request):
     # Retrieve all users
     users = User.objects.all()
-    return render(request, 'admin/view_users.html', {'users': users})
+    return render(request, 'admin/view_users.html', {'use   rs': users})
+
+def addToCart(request, pid):
+    myli = {"objects":[]}
+    try:
+        cart = CollectionCart.objects.get(user=request.user)
+        myli = json.loads((str(cart.product)).replace("'", '"'))
+        try:
+            myli['objects'][0][str(pid)] = myli['objects'][0].get(str(pid), 0) + 1
+        except:
+            myli['objects'].append({str(pid):1})
+        cart.product = myli
+        cart.save()
+    except:
+        myli['objects'].append({str(pid): 1})
+        cart = CollectionCart.objects.create(user=request.user, product=myli)
+    return redirect('cart')
+
+def incredecre(request, pid):
+    cart = CollectionCart.objects.get(user=request.user)
+    if request.GET.get('action') == "incre":
+        myli = json.loads((str(cart.product)).replace("'", '"'))
+        myli['objects'][0][str(pid)] = myli['objects'][0].get(str(pid), 0) + 1
+    if request.GET.get('action') == "decre":
+        myli = json.loads((str(cart.product)).replace("'", '"'))
+        if myli['objects'][0][str(pid)] == 1:
+            del myli['objects'][0][str(pid)]
+        else:
+            myli['objects'][0][str(pid)] = myli['objects'][0].get(str(pid), 0) - 1
+    cart.product = myli
+    cart.save()
+    return redirect('cart')
+
+def cart(request):
+    try:
+        cart = CollectionCart.objects.get(user=request.user)
+        product = (cart.product).replace("'", '"')
+        myli = json.loads(str(product))
+        product = myli['objects'][0]
+    except:
+        product = []
+    lengthpro = len(product)
+    return render(request, 'billing/add_to_cart.html', locals())
+def deletecart(request, pid):
+    cart = CollectionCart.objects.get(user=request.user)
+    product = (cart.product).replace("'", '"')
+    myli = json.loads(str(product))
+    del myli['objects'][0][str(pid)]
+    cart.product = myli
+    cart.save()
+    messages.success(request, "Delete Successfully")
+    return redirect('cart')

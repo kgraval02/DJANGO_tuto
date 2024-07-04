@@ -1,0 +1,117 @@
+Step 5. Create four functions in views.py all have different working.
+
+addToCart():- for adding the product to the cart
+def addToCart(request, pid):
+    myli = {"objects":[]}
+    try:
+        cart = Cart.objects.get(user=request.user)
+        myli = json.loads((str(cart.product)).replace("'", '"'))
+        try:
+            myli['objects'][0][str(pid)] = myli['objects'][0].get(str(pid), 0) + 1
+        except:
+            myli['objects'].append({str(pid):1})
+        cart.product = myli
+        cart.save()
+    except:
+        myli['objects'].append({str(pid): 1})
+        cart = Cart.objects.create(user=request.user, product=myli)
+    return redirect('cart')
+
+
+incredecre():- for increasing and decreasing the value of product quantity in the cart
+def incredecre(request, pid):
+    cart = Cart.objects.get(user=request.user)
+    if request.GET.get('action') == "incre":
+        myli = json.loads((str(cart.product)).replace("'", '"'))
+        myli['objects'][0][str(pid)] = myli['objects'][0].get(str(pid), 0) + 1
+    if request.GET.get('action') == "decre":
+        myli = json.loads((str(cart.product)).replace("'", '"'))
+        if myli['objects'][0][str(pid)] == 1:
+            del myli['objects'][0][str(pid)]
+        else:
+            myli['objects'][0][str(pid)] = myli['objects'][0].get(str(pid), 0) - 1
+    cart.product = myli
+    cart.save()
+    return redirect('cart')
+
+
+cart():- for rendering page cart.html
+def cart(request):
+    try:
+        cart = Cart.objects.get(user=request.user)
+        product = (cart.product).replace("'", '"')
+        myli = json.loads(str(product))
+        product = myli['objects'][0]
+    except:
+        product = []
+    lengthpro = len(product)
+    return render(request, 'cart.html', locals())
+
+       4. deletecart():- for deleting products from the cart.
+
+def deletecart(request, pid):
+    cart = Cart.objects.get(user=request.user)
+    product = (cart.product).replace("'", '"')
+    myli = json.loads(str(product))
+    del myli['objects'][0][str(pid)]
+    cart.product = myli
+    cart.save()
+    messages.success(request, "Delete Successfully")
+    return redirect('cart')
+
+Step 6. Create four URLs in urls.py for those three functions like the below:-
+
+path('add-to-cart/<int:pid>/', addToCart, name="addToCart"),
+path('cart/', cart, name="cart"),
+path('incredecre/<int:pid>/', incredecre, name="incredecre"),
+path('deletecart/<int:pid>/', deletecart, name="deletecart"),
+
+Step 7. We have loaded custom_tags in the cart.html page and using a number of functions inside this these are given below write these functions in the custom_tags.py file which already exist in template tags:-
+
+@register.filter()
+def productimage(pid):
+    data = Product.objects.get(id=pid)
+    return data.image.url
+
+@register.filter()
+def productname(pid):
+    data = Product.objects.get(id=pid)
+    return data.name
+
+@register.filter()
+def productprice(pid):
+    data = Product.objects.get(id=pid)
+    return data.price
+
+@register.simple_tag()
+def producttotalprice(pid, qty):
+    data = Product.objects.get(id=pid)
+    return int(qty) * int(data.price)
+
+For knowing these functions work please prefer the video which is already given below the page.
+
+Step 8. Run runserver command on the terminal like the below:-
+
+python manage.py runserver
+
+Step 9. Put given link in navigation.html , user-product.html and product-detail.html like the below:-
+
+navigation.html
+
+<li class="nav-item"><a href="/cart/" class="nav-link">My Cart</a></li>
+
+user-product.html
+
+<a href="/add-to-cart/{{j.id}}/" class="btn btn-primary">
+  <i class="fa fa-shopping-cart"></i> Add to cart
+</a>
+
+product_detail.html
+
+<a href="/add-to-cart/{{product.id}}/" class="btn-theme btn btn-success" tabindex="0">
+  <i class="fa fa-shopping-cart"></i> Add to Cart
+</a>
+
+
+Now we are able to see output on the given link after clicking on the cart link inside in navigation.
+

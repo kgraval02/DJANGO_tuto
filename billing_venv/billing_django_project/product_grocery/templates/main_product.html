@@ -14,21 +14,21 @@
         <!--Main Navigation-->
         <header>
           <!-- Sidebar -->
-          <nav id="sidebarMenu" class="bg-opacity-50 collapse d-lg-block sidebar collapse bg-white">
-            <div class="position-sticky bg-opacity-50 ">
-              <div class="list-group list-group-flush mx-3 mt-4">
-                <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
-                  <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>CATEGORY</span>
-                </a>
-                <a href="#" class="list-group-item list-group-item-action py-2 ripple">
-                  <i class="fas fa-chart-area fa-fw me-3"></i><span>PRODUCTS</span>
-                </a>
-                <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
-                  <i class="fas fa-tachometer-alt fa-fw me-3"></i><span></span>
-                </a>
-                <a href="#" class="list-group-item list-group-item-action py-2 ripple">
-                  <i class="fas fa-chart-area fa-fw me-3"></i><span></span>
-                </a>
+{#          <nav id="sidebarMenu" class="bg-opacity-50 collapse d-lg-block sidebar collapse bg-white">#}
+{#            <div class="position-sticky bg-opacity-50 ">#}
+{#              <div class="list-group list-group-flush mx-3 mt-4">#}
+{#                <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">#}
+{#                  <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>CATEGORY</span>#}
+{#                </a>#}
+{#                <a href="#" class="list-group-item list-group-item-action py-2 ripple">#}
+{#                  <i class="fas fa-chart-area fa-fw me-3"></i><span>PRODUCTS</span>#}
+{#                </a>#}
+{#                <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">#}
+{#                  <i class="fas fa-tachometer-alt fa-fw me-3"></i><span></span>#}
+{#                </a>#}
+{#                <a href="#" class="list-group-item list-group-item-action py-2 ripple">#}
+{#                  <i class="fas fa-chart-area fa-fw me-3"></i><span></span>#}
+{#                </a>#}
 
               </div>
             </div>
@@ -50,11 +50,12 @@
                 <img src="https://th.bing.com/th/id/OIP.dyH31_g1X78x4tpXsMoK6QHaF7?rs=1&amp;pid=ImgDetMain" height="25"
                   alt="quick cart hub" loading="lazy"/>
               </a>
-              <ul class="navbar-nav ms-auto d-flex flex-row">
-                <li class="nav-item me-3 me-lg-0">
-                  <a class="nav-link" href="#"> <i class="fab fa-github"></i> </a>
-                </li>
-              </ul>
+
+                <form method="post" action="{% url 'logout' %}">
+                    {% csrf_token %}
+
+                    <button type="submit">logout</button>
+                </form>
             </div>
             <!-- Container wrapper -->
           </nav>

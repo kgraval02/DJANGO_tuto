@@ -1,7 +1,6 @@
 from django.urls import path, include
 from . import views
 from django.contrib.auth import views as user_views
-
 urlpatterns = [
     # path('', include('grocery_product.urls')),
     # path('admin_home/', views.admin_home, name='admin_home_page'),
@@ -14,5 +13,11 @@ urlpatterns = [
     path('user_login/', user_views.LoginView.as_view(template_name='users/login.html'), name='user_login2'),
     path('user_logout/', user_views.LogoutView.as_view(template_name='users/logout.html'), name='logout'),
     path('user_view/', views.admin_user_view, name='user_view'),
-    # path('profile/', views.profile, name='user_profile'),
+    path('add-to-cart/<int:pid>/', views.addToCart, name="addToCart"),
+    path('cart/', views.cart, name="cart"),
+    path('incredecre/<int:pid>/', views.incredecre, name="incredecre"),
+    path('deletecart/<int:pid>/', views.deletecart, name="deletecart"),
+
+
 ]
+

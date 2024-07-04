@@ -17,20 +17,18 @@
       <nav id="sidebarMenu" class="bg-opacity-50 collapse d-lg-block sidebar collapse bg-white">
         <div class="position-sticky bg-opacity-50 ">
           <div class="list-group list-group-flush mx-3 mt-4">
-            <a href="{% url 'dashboard_admin' %}" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+            <a href="{% url 'b_home' %}" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
               <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>DASHBOARD</span>
             </a>
-            <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+            <a href="{% url 'view_cate' %}" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
               <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>VIEW CATEGORY</span>
             </a>
-            <a href="#" class="list-group-item list-group-item-action py-2 ripple">
-              <i class="fas fa-chart-area fa-fw me-3"></i><span>MANAGE PRODUCTS</span>
+            <a href="{% url 'view_prdt' %}" class="list-group-item list-group-item-action py-2 ripple">
+              <i class="fas fa-chart-area fa-fw me-3"></i><span>VIEW PRODUCTS</span>
             </a>
-            <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
-              <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>MANAGE USER</span>
-            </a>
-            <a href="#" class="list-group-item list-group-item-action py-2 ripple">
-              <i class="fas fa-chart-area fa-fw me-3"></i><span></span>
+            <a href="{% url 'cart' %}" class="list-group-item list-group-item-action py-2 ripple">
+{#            <a href="#" class="list-group-item list-group-item-action py-2 ripple">#}
+              <i class="fas fa-chart-area fa-fw me-3"></i><span> PREPARE BILL </span>
             </a>
 
           </div>
@@ -51,7 +49,6 @@
                         data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
                         aria-label="Toggle navigation">LOGOUT</button>
             </a>
-
         </div>
           <!-- Container wrapper -->
       </nav>

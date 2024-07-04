@@ -8,11 +8,21 @@
                 {% for c in cate %}
                     <div class="py-3 d-flex justify-content-between">
                         <li><a class="text-decoration-none text-dark" href="#">{{ c.name }}</a></li>
-                        <a href="{% url 'update_cate' c.id %}"><button class="btn btn-light"> EDIT </button></a>
-                        <a href="{% url 'delete_cate' c.id %}"><button class="btn btn-light"> DELETE </button></a>
+                        {% if user.is_superuser %}
+                            <a href="{% url 'update_cate' c.id %}"><button class="btn btn-light"> EDIT </button></a>
+                            <a href="{% url 'delete_cate' c.id %}"><button class="btn btn-light"> DELETE </button></a>
+                        {% endif %}
                     </div>
                 {% endfor %}
-            </ul>
+            </ul><hr>
+            <div class="d-flex justify-content-between">
+                {% if user.is_superuser %}
+                    <a href="{% url 'dashboard_admin' %}"><button class="btn btn-light"> HOME </button></a>
+                    <a href="{% url 'add_cate' %}"><button class="btn btn-light"> ADD ANOTHER </button></a>
+                {% else %}
+                    <a href="{% url 'user_view' %}"><button class="btn btn-light"> HOME </button></a>
+                {% endif %}
+            </div>
         </div>
     </div>
 {% endblock content %}

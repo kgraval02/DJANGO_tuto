@@ -3,7 +3,7 @@
     <h1><b> VIEW PRODUCT </b></h1><hr>
     <div class="py-3" style="width: 100%">
             <hr class="border-top-2">
-            <table class="table">
+            <table class="table text-center">
               <thead><tr>
                   <th scope="col">#</th>
                   <th scope="col">NAME</th>
@@ -13,15 +13,24 @@
                   <th scope="col">PRODUCT DESCRIPTION</th>
                   <th scope="col">PRODUCT MANUFACTURER</th>
                   <th scope="col">PRODUCT IMAGE</th>
+                  {% if user.is_superuser %}
+                    {{ pass }}
+                  {% else %}
+                    <th> QUENTITY </th>
+                    <th colspan="3" > ACTION </th>
+                  {% endif %}
                 </tr></thead>
-
-            {% for P in product %}
+                {% for P in product %}
                 <p class="text-light">{{ product.image.url }}</p>
                 <tbody>
                     <tr class="table-active">
                       <th scope="row"> 1 </th>
                         <td>
-                            <a class="text-decoration-none text-dark" href="{% url 'view_detail_prdt' P.id %}">{{ P.name }}</a>
+                            {% if user.is_superuser %}
+                                <a class="text-decoration-none text-dark" href="{% url 'view_detail_prdt' P.id %}">{{ P.name }}</a>
+                            {% else %}
+                                <a class="text-decoration-none text-dark" href="#">{{ P.name }}</a>
+                            {% endif %}
                         </td>
                         <td>{{ P.price }}</td>
                         <td>{{ P.discount }}</td>
@@ -29,9 +38,25 @@
                       <td>{{ P.description }}</td>
                       <td>{{ P.manufacturer }}</td>
                       <td><img src="{{ product.image.url }}" alt="no img found" height="100px" width="100px"></td>
+                    {% if user.is_superuser %}
+                        {{ pass }}
+                    {% else %}
+                        <td>{{ P.quentity }}</td>
+{#                        <td><button><a href="incredecre/{{P.id}}">ADD</a></button></td>#}
+{#                        <td><button><a href="deletecart/{{P.id}}">REMOVE</a></button></td>#}
+{#                        <td><button><a href="{% url 'deletecart' pid %}">REMOVE</a></button></td>#}
+                    {% endif %}
                     </tr>
                 </tbody>
         {% endfor %}
-            </table>
+            </table><hr>
+            <div class="d-flex justify-content-between">
+                {% if user.is_superuser %}
+                    <a href="{% url 'dashboard_admin' %}"><button class="btn btn-light"> HOME </button></a>
+                    <a href="{% url 'add_prdt' %}"><button class="btn btn-light"> ADD ANOTHER </button></a>
+                {% else %}
+                    <a href="{% url 'b_home' %}"><button class="btn btn-light"> HOME </button></a>
+                {% endif %}
+            </div>
     </div>
 {% endblock %}
