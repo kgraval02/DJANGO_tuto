@@ -9,6 +9,16 @@ admin1_quick@quick.com
 pass
 pass_1@adm1
 
+**
+name
+admin2_quickcart
+
+id
+admin2_quick@quick.com
+
+pass
+pass_2@adm2
+
 user
 ==+==+==+==+==+==+==+
 name
