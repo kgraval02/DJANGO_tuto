@@ -1,12 +1,9 @@
-from urllib import request
-
-from django.contrib.auth import authenticate, login
-from django.contrib.auth.decorators import user_passes_test
-from django.contrib.auth.views import LoginView
-from django.shortcuts import render, redirect
+from django.contrib import messages
+from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
+from django.shortcuts import render
 from django.urls import reverse_lazy
-from django.utils.decorators import method_decorator
-from django.views.generic import TemplateView
+from django.views.generic import TemplateView, CreateView
+from billing.forms import UserRegisterForm
 
 
 def home(request):
@@ -20,20 +17,40 @@ def about(request):
 class Admin_login(LoginView):
     template_name = 'admin/admin_login.html'
     success_url = reverse_lazy('dashboard_admin')
-    def get_context_data(self, **kwargs):
-        context = super().get_context_data(**kwargs)
-        context['title'] = 'Admin Login'
-        return context
+    def get_success_url(self):
+        return self.success_url
 
-    def form_valid(self, form):
-        if self.request.user.is_superuser:
-            form.add_error(None, 'You do not have permission to access this page.')
-            return self.form_invalid(form)
-        else:
-            return super().form_valid(form)
-
-
-@method_decorator(user_passes_test(lambda u: u.is_superuser), name='dispatch')
 class AdminDashboardView(TemplateView):
     template_name = 'admin/dashboard_admin.html'
-
+class RegisterUser(CreateView):
+    form_class = UserRegisterForm
+    template_name = 'users/register.html'
+    success_url = reverse_lazy('login_user')
+    def form_valid(self, form):
+        response = super().form_valid(form)
+        # Additional actions after a valid form can be handled here
+        return response
+class UserLoginView(LoginView):
+    template_name = 'users/login.html'
+    success_url = reverse_lazy('bill_user_home')
+    def get_success_url(self):
+        return self.success_url
+class UserDashHome(TemplateView):
+    template_name = 'billing/billing_home.html'
+class CustomLogoutView(LogoutView):
+    def get_next_page(self):
+        if self.request.user.is_staff:
+            return 'home_page'
+        return 'home_page'
+class CustomPasswordChangeView(PasswordChangeView):
+    template_name = 'users/change_pass.html'
+    success_url = reverse_lazy('bill_user_home')
+    def form_valid(self, form):
+        messages.success(self.request, "Password Changed")
+        return super().form_valid(form)
+    def form_invalid(self, form):
+        if 'old_password' in form.errors:
+            messages.error(self.request, "Invalid Password")
+        elif 'new_password2' in form.errors:
+            messages.error(self.request, "Password not matching")
+        return super().form_invalid(form)

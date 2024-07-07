@@ -1,0 +1,24 @@
+{% extends "users/base_html.html" %}
+{% load crispy_forms_tags %}
+
+{% block content %}
+    <div>
+        <form method="post">
+            {% csrf_token %}
+            <formfield>
+                {{ form|crispy }}
+            </formfield>
+
+            <div class="d-flex flex-row justify-content-between" >
+                <button class="btn btn-primary" type="submit">
+                    <a class="tect-decoration-none text-center text-info">CHANGE PASS</a>
+                </button>
+
+                <button class="btn btn-primary" type="reset" href="#">
+                    <a class="tect-decoration-none text-center text-info">CANCEL</a>
+                </button>
+            </div>
+        </form>
+    </div>
+
+{% endblock content %}
