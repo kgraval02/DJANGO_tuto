@@ -1,1 +1,15 @@
 project continuing
+
+admin side
+view user page for aprove and delete
+
+user
+configure logout
+
+
+# views.py
+from django.shortcuts import get_object_or_404
+from django.views.generic import DetailView
+from .models import Product, Cart
+from django.db.models import Sum
+

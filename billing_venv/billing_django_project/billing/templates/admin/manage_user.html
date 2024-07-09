@@ -1,0 +1,81 @@
+{% extends "admin/main_admin_nav.html" %}
+{% block content %}
+    <div class="container mt-5">
+        <h2>List of Users</h2>
+{#        <p>{{ request.build_absolute_uri }}</p>#}
+        <table class="table table-bordered text-center">
+            <tbody>
+            {% for user in users %}
+                <p class="bg-success">{{ user.is_approved }}</p>
+                {% if request.user == user %}
+                    <tr  class="bg-success">
+                        <td class="bg-success">{{ user.id }}</td>
+                        <td class="bg-success">{{ user.username }}</td>
+                        <td class="bg-success">{{ user.email }}</td>
+                        <td class="bg-success">{{ user.is_superuser }}</td>
+                        <td class="bg-success">{{ user.is_staff }}</td>
+                        <td class="bg-success">{{ user.is_active }}</td>
+                        <td class="bg-success">{{ user.date_joined }}</td>
+                        <td colspan="2" CLASS="text-muted">no action</td>
+                    </tr>
+                {% else %}
+                    <tr>
+                        <td>{{ user.id }}</td>
+                        <td>{{ user.username }}</td>
+                        <td>{{ user.email }}</td>
+                        <td>{{ user.is_superuser }}</td>
+                        <td>{{ user.is_staff }}</td>
+                        <td>{{ user.is_active }}</td>
+                        <td>{{ user.date_joined }}</td>
+                        {% if user.is_approved %}
+                            <td>ww{{ user.is_approved }}</td>
+                        {% else %}
+                            {% if user.is_staff %}
+                                <TD>AMDIN</TD>
+                            {% else %}
+                                <td>
+                                    {% if user.is_approved %}
+                                        <a>{{ user.is_approved }}</a>
+                                    {% else %}
+                                        <div>
+                                            <a class="btn btn-primary" href="#">APROVE</a>
+                                            <a class="btn btn-success" href="#">REJECT</a>
+                                        </div>
+                                    {% endif %}
+                                </td>
+                            {% endif %}
+
+                        {% endif %}
+
+                        {% if user.is_staff %}
+                            <td>ADMIN</td>
+                        {% else %}
+                            <td>
+                                <a class="btn btn-danger" href="#">DELETE</a>
+                            </td>
+                        {% endif %}
+                    </tr>
+
+                {% endif %}
+            {% endfor %}
+            </tbody>
+            <thead>
+                <tr>
+                    <th>ID</th>
+                    <th>Username</th>
+                    <th>Email</th>
+                    <th>Is Superuser</th>
+                    <th>Is Staff</th>
+                    <th>Is Active</th>
+                    <th>Date Joined</th>
+                    <th>Is Approved</th>
+                    <th>Action</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+{% endblock %}
+
+
+
+

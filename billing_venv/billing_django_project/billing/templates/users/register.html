@@ -3,7 +3,7 @@
 {% block content %}
     <div class="m-2 p-2 card" >
         <div class="content-section">
-            <h1 class="p-2">User registration page</h1>
+            <h1 class="p-2">User registration</h1>
             <form method="POST">
                 {% csrf_token %}
                 <fieldset class="form-group container">
@@ -16,9 +16,15 @@
                     <button class="btn btn-primary"  type="submit">SIGN UP</button>
                 </div>
                 <div class="border-top pt-3 d-flex justify-content-end">
-                    <small class="text-muted pt-2 rounded text-light bg-info p-3 m-3 ">
-                        Already having account ? <a class="ml-2 bg-warning p-1 rounded" href="{% url 'login_user' %}">SIGN IN</a>
-                    </small>
+                    {% if user.is_superuser %}
+                        <small class="text-muted pt-2 rounded text-light bg-info p-3 m-3 ">
+                            BACK TO DASHBOARD <a class="ml-2 bg-warning p-1 rounded" href="{% url 'dashboard_admin' %}">CLICK</a>
+                        </small>
+                    {% else %}
+                        <small class="text-muted pt-2 rounded text-light bg-info p-3 m-3 ">
+                            Already having account ? <a class="ml-2 bg-warning p-1 rounded" href="{% url 'login_user' %}">LOGIN</a>
+                        </small>
+                    {% endif %}
                 </div>
                 <br>
             </form>

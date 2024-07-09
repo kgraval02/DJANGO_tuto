@@ -1,0 +1,43 @@
+{% extends 'billing/main_user_nav.html' %}
+{% block content %}
+        <div class="py-3 my-4">
+            <a href="#" class="btn btn-warning px-4" style="float:right">Continue Shopping</a>
+            <a href="{% url 'view_product' %}" class="btn btn-info px-4 mx-4 mr-2" style="float:right">Buy Now</a>
+        </div>
+        <table class="table table-bordered">
+            <thead>
+                <tr>
+                    <th>Image</th>
+                    <th>Name</th>
+                    <th>Price</th>
+                    <th>Quantity</th>
+                    <th>Total</th>
+                    <th class="text-center" COLSPAN="3">ACTION</th>
+                </tr>
+            </thead>
+            <tbody>
+            {% for key,value in request.session.cart.items %}
+                <tr>
+                    <td>Image</td>
+                    <td>Name</td>
+                    <td>Price</td>
+                    <td>Quantity</td>
+                    <td>Total</td>
+                    <td>Add</td>
+                    <td>Delete</td>
+                    <td>Remove</td>
+                </tr>
+            {% endfor %}
+            </tbody>
+        </table>
+{% endblock %}
+
+{#<script>#}
+{#    var prolenth = '{{lengthpro}}';#}
+{#    var mytotal = 0;#}
+{#    for(var i=1;i<=prolenth*1;i++){#}
+{#        totalprice = parseFloat(document.getElementById('totalprice-'+i).innerHTML);#}
+{#        var mytotal = parseFloat(mytotal) + (totalprice);#}
+{#    }#}
+{#    document.getElementById('total-price').innerHTML  = mytotal;#}
+{#</script>#}

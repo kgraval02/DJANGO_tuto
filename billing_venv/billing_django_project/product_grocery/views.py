@@ -2,6 +2,7 @@ from django.contrib import messages
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from .models import Category, Product
+# from billing.models import Cart
 from .forms import CategoryForm, ProductForm
 
 # category
@@ -9,7 +10,7 @@ class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'category/add_category.html'
-    success_url = reverse_lazy('bill_user_home')  # Assuming you have a category list view
+    success_url = reverse_lazy('view_category')  # Assuming you have a category list view
 class CategoryListView(ListView):
     model = Category
     template_name = 'category/view_category.html'
@@ -22,15 +23,15 @@ class CategoryUpdateView(UpdateView):
     context_object_name = 'category'
 class CategoryDeleteView(DeleteView):
     model = Category
-    template_name = 'category'
-    success_url = reverse_lazy('view-category')
+    template_name = 'category/delete_category.html'
+    success_url = reverse_lazy('view_category')
 
 # products
 class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
     template_name = 'products/product_add.html'
-    success_url = reverse_lazy('products')  # Adjust this URL as necessary
+    success_url = reverse_lazy('view_product')  # Adjust this URL as necessary
     def form_valid(self, form):
         response = super().form_valid(form)
         messages.success(self.request, "Product added")
@@ -68,5 +69,4 @@ class ProductDetailView(DetailView):
     pk_url_kwarg = 'pid'
     def get_context_data(self, **kwargs):
         context = super().get_context_data(**kwargs)
-        context['latest_product'] = Product.objects.exclude(id=self.object.id).order_by('-id')[:10]
         return context

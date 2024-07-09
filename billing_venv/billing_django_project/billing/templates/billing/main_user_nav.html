@@ -26,7 +26,7 @@
             <a href="{% url 'view_product' %}" class="list-group-item list-group-item-action py-2 ripple">
               <i class="fas fa-chart-area fa-fw me-3"></i><span>VIEW PRODUCTS</span>
             </a>
-            <a href="#" class="list-group-item list-group-item-action py-2 ripple">
+            <a href="{% url 'view_product' %}" class="list-group-item list-group-item-action py-2 ripple">
               <i class="fas fa-chart-area fa-fw me-3"></i><span> PREPARE BILL </span>
             </a>
 
@@ -43,18 +43,21 @@
                 <img src="https://th.bing.com/th/id/OIP.dyH31_g1X78x4tpXsMoK6QHaF7?rs=1&amp;pid=ImgDetMain" height="25"
                      alt="quick cart hub" loading="lazy"/>
             </a>
-            <a href="{% url 'logout' %}">
-                <button class="btn-primary " data-mdb-button-init class="navbar-toggler" type="button" data-mdb-collapse-init
-                        data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
-                        aria-label="Toggle navigation">LOGOUT</button>
-            </a>
+            <form>
+                <a href="{% url 'logout' %}">
+                    <button class="btn-primary " data-mdb-button-init class="navbar-toggler" type="button" data-mdb-collapse-init
+                            data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
+                            aria-label="Toggle navigation">LOGOUT</button>
+                </a>
+            </form>
         </div>
       </nav>
     </header>
 
     <main style="margin-top: 55px">
-      <div  class="bg-danger container py-3"  style="height: 100vh ">
+      <div  class="bg-danger container py-3"  style="height: 100vh">
         {% block content %}
+
 
         {% endblock %}
       </div>
