@@ -1,6 +1,6 @@
 admin
 ==+==+==+==+==+==+==+
-name 
+name
 admin1_quickcart
 
 id
@@ -59,3 +59,15 @@ kashyapg262002@gmail.com
 
 pass
 pass_4@use4
+
+------------
+name
+user5_quickcart
+
+id
+kashyapg262002@gmail.com
+
+pass
+pass_5@use5
+
+

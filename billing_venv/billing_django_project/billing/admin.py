@@ -1,9 +1,12 @@
 from django.contrib import admin
 from django.contrib.auth.admin import UserAdmin
-from .models import CustomUser
+from .models import Feedback
 
-class CustomUserAdmin(UserAdmin):
-    fieldsets = UserAdmin.fieldsets + (
-        (None, {'fields': ('is_approved',)}),
-    )
-admin.site.register(CustomUser, CustomUserAdmin)
+
+class FeedbackAdmin(admin.ModelAdmin):
+    list_display = ('user', 'message', 'created_at', 'reviewed')
+    list_filter = ('reviewed', 'created_at')
+    search_fields = ('user__username', 'message')
+
+
+admin.site.register(Feedback, FeedbackAdmin)

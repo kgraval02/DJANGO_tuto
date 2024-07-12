@@ -1,0 +1,15 @@
+{% extends "billing/main_user_nav.html" %}
+{% load crispy_forms_tags %}
+{% block content %}
+    <div class="m-2 p-2 card" >
+        <div class="content-section">
+            <h1 class="p-2">THANKS !!</h1>
+            <h2>Thank you for your feedback!</h2>
+        </div>
+    </div>
+    <div class="py-3 form-group btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
+        <a class="btn btn-primary" href="{% url 'bill_user_home' %}" type="submit">HOME PAGE</a>
+    </div>
+{% endblock content %}
+
+

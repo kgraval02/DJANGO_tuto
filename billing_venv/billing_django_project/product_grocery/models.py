@@ -8,7 +8,6 @@ class Category(models.Model):
     def __str__(self):
         return self.name if self.name else ''
 
-
 class Product(models.Model):
     category = models.ForeignKey(Category, on_delete=models.CASCADE, null=True, blank=True)
     name = models.CharField(max_length=100, null=True, blank=True)

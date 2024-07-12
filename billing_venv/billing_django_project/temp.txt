@@ -13,3 +13,122 @@ from django.views.generic import DetailView
 from .models import Product, Cart
 from django.db.models import Sum
 
+====================================
+
+To ensure that only admins can access the admin pages and users can access their respective pages in your Django project, you can
+implement several steps involving Django's authentication and authorization mechanisms. Here's a step-by-step guide:
+
+### 1. Create User Groups and Permissions
+
+First, create user groups for `Admins` and `Users`. You can do this via the Django admin panel or programmatically.
+
+#### Via Admin Panel:
+1. Go to the Django admin panel.
+2. Create two groups: `Admins` and `Users`.
+3. Assign permissions to each group as needed.
+
+#### Programmatically:
+You can create a Django management command or use a migration to create these groups and assign permissions.
+
+### 2. Decorate Views with Permissions
+
+Use Django's built-in decorators to restrict access to views.
+
+#### For Admin Views:
+Use the `user_passes_test` decorator to restrict access to admin users.
+
+```python
+from django.contrib.auth.decorators import user_passes_test
+
+def admin_check(user):
+    return user.groups.filter(name='Admins').exists()
+
+@user_passes_test(admin_check)
+def admin_view(request):
+    # Your view logic here
+    return render(request, 'admin_template.html')
+```
+
+#### For User Views:
+Use the `login_required` decorator to ensure that only authenticated users can access certain views.
+
+```python
+from django.contrib.auth.decorators import login_required
+
+@login_required
+def user_view(request):
+    # Your view logic here
+    return render(request, 'user_template.html')
+```
+
+### 3. URL Configuration
+
+Ensure your URL patterns are configured to direct users to the appropriate views.
+
+```python
+from django.urls import path
+from . import views
+
+urlpatterns = [
+    path('admin-page/', views.admin_view, name='admin_view'),
+    path('user-page/', views.user_view, name='user_view'),
+]
+```
+
+### 4. Redirect Based on User Type
+
+When a user logs in, you can redirect them to the appropriate page based on their group.
+
+#### In `views.py`:
+
+```python
+from django.shortcuts import redirect
+from django.contrib.auth import authenticate, login
+
+def login_view(request):
+    if request.method == 'POST':
+        username = request.POST['username']
+        password = request.POST['password']
+        user = authenticate(request, username=username, password=password)
+        if user is not None:
+            login(request, user)
+            if user.groups.filter(name='Admins').exists():
+                return redirect('admin_view')
+            else:
+                return redirect('user_view')
+        else:
+            # Invalid login
+            pass
+    return render(request, 'login.html')
+```
+
+### 5. Custom Admin Panel
+
+If you're using a custom admin panel, ensure it uses the same logic to restrict access.
+
+### 6. Template-Level Control
+
+For added security, you can control what is displayed in templates based on user groups.
+
+```html
+{% if user.is_authenticated %}
+    {% if user.groups.filter(name='Admins').exists %}
+        <a href="{% url 'admin_view' %}">Admin Panel</a>
+    {% else %}
+        <a href="{% url 'user_view' %}">User Dashboard</a>
+    {% endif %}
+{% endif %}
+```
+
+### Summary
+
+- Create user groups (`Admins` and `Users`) and assign appropriate permissions.
+- Use decorators like `user_passes_test` and `login_required` to restrict access to views.
+- Configure URL patterns to map to the appropriate views.
+- Redirect users to their respective pages based on their group upon login.
+- Ensure your custom admin panel follows the same logic for access control.
+- Use template-level control to manage what is displayed based on user roles.
+
+By following these steps, you can ensure that admins and users can only access their respective pages in your Django project.
+
+

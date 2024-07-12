@@ -1,0 +1,45 @@
+{% extends "admin/main_admin_nav.html" %}
+{% block content %}
+    <div class="container mt-5">
+        <h2>List of Feedback Given</h2>
+        <table class="table table-bordered text-center">
+            <tbody>
+                {% for feedback in feedback_list %}
+                    <tr>
+                        <td>{{ forloop.counter }}</td>
+                        <td>{{ feedback.user.username }}</td>
+                        <td>{{ feedback.message }}</td>
+                        <td>{{ feedback.created_at }}</td>
+                        {% if feedback.reviewed %}
+                            <td>REVIEWED</td>
+                            <td>
+                                <div CLASS="d-flex">
+                                    <a class="btn mx-2 btn-success" href="{% url 'delete_feedback' feedback.id %}"> DELETE </a>
+                                </div>
+                        {% else %}
+                            <td>PENDING REVIEWED</td>
+                            <td>
+                                <div CLASS="d-flex">
+                                    <a class="btn mx-2 btn-primary" href="{% url 'review_feedback' feedback.id %}"> REVIEW </a>
+                                    <a class="btn mx-2 btn-success" href="{% url 'delete_feedback' feedback.id %}"> DELETE </a>
+                                </div>
+                            </td>
+                        {% endif %}
+                    </tr>
+                {% endfor %}
+            </tbody>
+            <thead>
+                <tr>
+                    <th>Sr. No.</th>
+                    <th>User</th>
+                    <th>Message</th>
+                    <th>Created At</th>
+                    <th>Reviewed</th>
+                    <th>Actions</th>
+                </tr>
+            </thead>
+        </table>
+    </div>
+
+{% endblock %}
+

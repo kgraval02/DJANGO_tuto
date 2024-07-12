@@ -56,7 +56,11 @@
               <a href="{% url 'usersforadmin' %}" class="list-group-item list-group-item-action py-2 ripple">
                   <i class="fas fa-chart-area fa-fw me-3"></i><span>DELETE USER</span>
                 </a></div>
-
+{#                manage issue#}
+              <div CLASS="pt-3">MANAGE ISSUE
+                <a href="{% url 'manage_feedback' %}" class="list-group-item list-group-item-action py-2 ripple">
+                    <i class="fas fa-chart-area fa-fw me-3"></i><span>VIEW ISSUES</span>
+                </a>
           </div>
         </div>
       </nav>
@@ -70,14 +74,10 @@
                 <img src="https://th.bing.com/th/id/OIP.dyH31_g1X78x4tpXsMoK6QHaF7?rs=1&amp;pid=ImgDetMain" height="25"
                      alt="quick cart hub" loading="lazy"/>
             </a>
-            <form method="POST">
-                <a class="text-decoration-none text-dark" href="{% url 'logout' %}">
-                    <button class="btn-primary " data-mdb-button-init class="navbar-toggler" type="button" data-mdb-collapse-init
-                            data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
-                            aria-label="Toggle navigation">LOGOUT</button>
-                </a>
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">logout</button>
             </form>
-
         </div>
           <!-- Container wrapper -->
       </nav>
@@ -86,7 +86,7 @@
 
         <!--Main layout-->
     <main style="margin-top: 55px">
-      <div  class="bg-danger container py-3"  style="height: 100vh ">
+      <div  class="bg-danger container py-3">
         {% block content %}
 
         {% endblock %}

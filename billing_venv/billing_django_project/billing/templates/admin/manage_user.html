@@ -6,7 +6,6 @@
         <table class="table table-bordered text-center">
             <tbody>
             {% for user in users %}
-                <p class="bg-success">{{ user.is_approved }}</p>
                 {% if request.user == user %}
                     <tr  class="bg-success">
                         <td class="bg-success">{{ user.id }}</td>
@@ -14,7 +13,6 @@
                         <td class="bg-success">{{ user.email }}</td>
                         <td class="bg-success">{{ user.is_superuser }}</td>
                         <td class="bg-success">{{ user.is_staff }}</td>
-                        <td class="bg-success">{{ user.is_active }}</td>
                         <td class="bg-success">{{ user.date_joined }}</td>
                         <td colspan="2" CLASS="text-muted">no action</td>
                     </tr>
@@ -25,34 +23,26 @@
                         <td>{{ user.email }}</td>
                         <td>{{ user.is_superuser }}</td>
                         <td>{{ user.is_staff }}</td>
-                        <td>{{ user.is_active }}</td>
                         <td>{{ user.date_joined }}</td>
-                        {% if user.is_approved %}
-                            <td>ww{{ user.is_approved }}</td>
-                        {% else %}
+                        {% if user.is_active %}
                             {% if user.is_staff %}
-                                <TD>AMDIN</TD>
+                                <td colspan="2">APPROVED ADMIN</td>
                             {% else %}
+                                <td> APPROVED </td>
+                            {% endif %}
+                        {% else %}
+                            {% if not user.is_staff %}
                                 <td>
-                                    {% if user.is_approved %}
-                                        <a>{{ user.is_approved }}</a>
-                                    {% else %}
-                                        <div>
-                                            <a class="btn btn-primary" href="#">APROVE</a>
-                                            <a class="btn btn-success" href="#">REJECT</a>
-                                        </div>
-                                    {% endif %}
+                                    <div>
+                                        <a class="btn btn-primary" href="{% url 'approve_user' user.id %}"> APPROVED </a>
+                                        <a class="btn btn-success" href="{% url 'reject_user' user.id %}"> REJECT </a>
+                                    </div>
                                 </td>
                             {% endif %}
-
                         {% endif %}
 
-                        {% if user.is_staff %}
-                            <td>ADMIN</td>
-                        {% else %}
-                            <td>
-                                <a class="btn btn-danger" href="#">DELETE</a>
-                            </td>
+                        {% if user.is_staff != 1 %}
+                            <td><a class="btn btn-danger" href="{% url 'delete_user' user.id %}">DELETE</a></td>
                         {% endif %}
                     </tr>
 
@@ -66,7 +56,6 @@
                     <th>Email</th>
                     <th>Is Superuser</th>
                     <th>Is Staff</th>
-                    <th>Is Active</th>
                     <th>Date Joined</th>
                     <th>Is Approved</th>
                     <th>Action</th>

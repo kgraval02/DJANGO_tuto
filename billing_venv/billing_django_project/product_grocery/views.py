@@ -6,27 +6,32 @@ from .models import Category, Product
 from .forms import CategoryForm, ProductForm
 
 # category
+
 class CategoryCreateView(CreateView):
     model = Category
     form_class = CategoryForm
     template_name = 'category/add_category.html'
     success_url = reverse_lazy('view_category')  # Assuming you have a category list view
+
 class CategoryListView(ListView):
     model = Category
     template_name = 'category/view_category.html'
     context_object_name = 'categories'
+
 class CategoryUpdateView(UpdateView):
     model = Category
     form_class = CategoryForm
     template_name = 'category/edit_category.html'
     success_url = reverse_lazy('view_category')
     context_object_name = 'category'
+
 class CategoryDeleteView(DeleteView):
     model = Category
     template_name = 'category/delete_category.html'
     success_url = reverse_lazy('view_category')
 
 # products
+
 class ProductCreateView(CreateView):
     model = Product
     form_class = ProductForm
@@ -36,10 +41,12 @@ class ProductCreateView(CreateView):
         response = super().form_valid(form)
         messages.success(self.request, "Product added")
         return response
+
 class ProductListView(ListView):
     model = Product
     template_name = 'products/product_view.html'
     context_object_name = 'products'
+
 class ProductUpdateView(UpdateView):
     model = Product
     form_class = ProductForm
@@ -54,6 +61,7 @@ class ProductUpdateView(UpdateView):
         context = super().get_context_data(**kwargs)
         context['categories'] = Category.objects.all()
         return context
+
 class ProductDeleteView(DeleteView):
     model = Product
     template_name = 'products/product_confirm_delete.html'
@@ -62,6 +70,7 @@ class ProductDeleteView(DeleteView):
         response = super().delete(request, *args, **kwargs)
         messages.success(request, "Product Deleted")
         return response
+
 class ProductDetailView(DetailView):
     model = Product
     template_name = 'products/detail_product.html'

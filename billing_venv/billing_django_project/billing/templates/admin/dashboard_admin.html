@@ -1,29 +1,79 @@
 {% extends "admin/main_admin_nav.html" %}
 {% block content %}
-    <div class="bg-success">
-        <div class="card container bg-danger" style="margin-top: auto; height: 100%; width: 100%">
+    <div class="bg-danger">
+        <div class="card container" style="margin-top: auto; height: 100%; width: 100%">
+            <h1 class="p-3">ADMIN DASHBOARD</h1><hr><hr>
             <div class="container">
                 <div class="row justify-content-center rounded">
                     <a class="my-2 mx-3 col-md-4 d-flex justify-content-center rounded text-decoration-none bg-success"
-                       href="#">
-                        <button class="mx-3  my-2  btn btn-success align-center"> A </button>
+                       href="{% url 'view_category' %}">
+                        <button class="mx-3  my-2  btn btn-success align-center">TOTAL CATEGORIES AVAILABE
+                            <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ total_categories  }}</p>
+                        </button>
                     </a>
-
                     <a class="my-2 mx-3 col-md-4  bg-success d-flex rounded justify-content-center text-decoration-none"
-                       href="#">
-                        <button class="mx-3  my-2 btn btn-success"> B </button>
+                       href="{% url 'view_product' %}">
+                        <button class="mx-3  my-2 btn btn-success">TOTAL PRODUCTS AVAILABLE
+                            <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ total_products  }}</p>
+                        </button>
                     </a>
 
                     <a class="my-2 mx-3 col-md-4 d-flex justify-content-center rounded text-decoration-none bg-success"
-                       href="#">
-    {#                   href="{% url 'admin_login' %}">#}
-                        <button class="mx-3  my-2  btn btn-success align-center">  C </button>
+                       href="{% url 'usersforadmin' %}">
+                        <button class="mx-3  my-2  btn btn-success align-center">TOTAL ADMINS
+                            <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ total_admins }}</p>
+                        </button>
                     </a>
 
-                    <a class="my-2 mx-3 col-md-4  bg-success d-flex rounded justify-content-center text-decoration-none"
-                       href="#">
-                        <button class="mx-3  my-2 btn btn-success"> D </button>
+                    <a class="my-2 mx-3 col-md-4 d-flex justify-content-center rounded text-decoration-none bg-success"
+                       href="{% url 'usersforadmin' %}">
+                        <button class="mx-3  my-2  btn btn-success align-center">TOTAL USERS
+                            <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ total_users }}</p>
+                        </button>
                     </a>
+                    <a class="my-2 mx-3 col-md-4 d-flex justify-content-center rounded text-decoration-none bg-success"
+                       href="{% url 'usersforadmin' %}">
+                        <button class="mx-3  my-2  btn btn-success align-center">USER REQUESTS
+                            <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ user_requests }}</p>
+                        </button>
+                    </a>
+
+                    <a class="my-2 mx-3 col-md-4 d-flex justify-content-center rounded text-decoration-none bg-success"
+                       href="{% url 'manage_feedback' %}">
+                        <button class="mx-3  my-2  btn btn-success align-center">RAISED ISSUES
+                            <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ raised_issues }}</p>
+                        </button>
+                    </a>
+
+                    <div class="my-2 mx-3 bg-success d-flex rounded justify-content-center text-decoration-none"
+                       href="#">
+                        <table>
+                            <tr>
+                                <td colspan="3" CLASS="text-center">
+                                    <button class="mx-3  my-2 btn btn-success">TOTAL BILLED
+                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ raised_issues }}</p>
+                                    </button>
+                                </td>
+                            </tr>
+                            <tr>
+                                <td>
+                                    <button class="mx-3  my-2 btn btn-success">TOTAL BILLED TODAY
+                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ raised_issues }}</p>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="mx-3  my-2 btn btn-success">TOTAL BILLED THIS MONTH
+                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ raised_issues }}</p>
+                                    </button>
+                                </td>
+                                <td>
+                                    <button class="mx-3  my-2 btn btn-success">TOTAL BILLED THIS YEAR
+                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ raised_issues }}</p>
+                                    </button>
+                                </td>
+                            </tr>
+                        </table>
+                    </div>
                 </div>
             </div>
         </div>

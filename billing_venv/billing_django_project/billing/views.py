@@ -1,20 +1,28 @@
-import json
 from django.contrib.admin.views.decorators import staff_member_required
-from django.contrib.auth.models import User
+from django.contrib.auth import login
+from django.contrib.auth.decorators import user_passes_test, login_required
 from django.contrib import messages
+from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView
-from billing.forms import UserRegisterForm
+from billing.forms import UserRegisterForm, UserFeedback
+from billing.models import Feedback
+from product_grocery.models import Product, Category
+
 
 def home(request):
     data_context = {
         'title': 'Home Page - QUICK CART HUB',
     }
     return render(request, 'home.html', data_context)
+
+
 def about(request):
-    return render(request,template_name='about.html', context={'title': 'About Page - QUICK CART HUB'})
+    return render(request, template_name='about.html', context={'title': 'About Page - QUICK CART HUB'})
+
+
 @staff_member_required
 def userlist(request):
     users = User.objects.all()
@@ -24,57 +32,85 @@ def userlist(request):
     }
     return render(request, template_name='admin/manage_user.html', context=context)
 
-class Admin_login(LoginView):
+
+class AdminLogin(LoginView):
     template_name = 'admin/admin_login.html'
     success_url = reverse_lazy('dashboard_admin')
+
     def get_success_url(self):
         return self.success_url
+
 
 class AdminDashboardView(TemplateView):
     template_name = 'admin/dashboard_admin.html'
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        context['total_categories'] = Category.objects.count()
+        context['total_products'] = Product.objects.count()
+        context['total_admins'] = User.objects.filter(is_staff=True).count()
+        context['total_users'] = User.objects.filter(is_staff=False, is_active=True).count()
+        context['user_requests'] = User.objects.filter(is_active=False, is_staff=False).count()
+        context['raised_issues'] = Feedback.objects.count()
+        return context
+
+
 class RegisterUser(CreateView):
     form_class = UserRegisterForm
     template_name = 'users/register.html'
-    success_url = reverse_lazy('login_user')
+    if User.is_superuser:
+        success_url = reverse_lazy('dashboard_admin')
+    else:
+        success_url = reverse_lazy('home_page')
+
     def form_valid(self, form):
         user = form.save(commit=False)
-        user.is_approved = False
+        user.is_active = False
         user.save()
         return super().form_valid(form)
 
-# class UserLoginView(LoginView):
-#     template_name = 'users/login.html'
-#     success_url = reverse_lazy('bill_user_home')
-#     def form_valid(self, form):
-#         user = form.get_user()
-#         if user.is_approved:
-#             login(self.request, user)
-#             return self.success_url
-#
-#         else:
-#             messages.error(self.request, 'Your account is not approved yet.')
-#             return redirect('login_user')
+
 class UserLoginView(LoginView):
     template_name = 'users/login.html'
     success_url = reverse_lazy('bill_user_home')
-    def get_success_url(self):
-        return self.success_url
+
+    def form_valid(self, form):
+        user = form.get_user()
+        if user.is_superuser:
+            messages.error(self.request, 'Not an user.')
+            return redirect('home_page')
+        else:
+            if user.is_active:
+                login(self.request, user)
+                return redirect(self.success_url)
+            else:
+                messages.error(self.request, 'Your account is not approved yet.')
+                return redirect('login_user')
+
 
 class UserDashHome(TemplateView):
     template_name = 'billing/billing_home.html'
+
+
 class CustomLogoutView(LogoutView):
     def get(self, request, *args, **kwargs):
         return self.post(request, *args, **kwargs)
+
     def get_next_page(self):
         if self.request.user.is_staff:
             return 'home_page'
-        return 'home_page'
+        else:
+            return 'home_page'
+
+
 class CustomPasswordChangeView(PasswordChangeView):
     template_name = 'users/change_pass.html'
     success_url = reverse_lazy('bill_user_home')
+
     def form_valid(self, form):
         messages.success(self.request, "Password Changed")
         return super().form_valid(form)
+
     def form_invalid(self, form):
         if 'old_password' in form.errors:
             messages.error(self.request, "Invalid Password")
@@ -83,49 +119,70 @@ class CustomPasswordChangeView(PasswordChangeView):
         return super().form_invalid(form)
 
 
+def admin_required(view_func):
+    return user_passes_test(lambda u: u.is_superuser)(view_func)
 
-# cart_add
-# item_clear
-# item_increment
-# item_decrement
-# cart_clear
-# cart_detail
-#
-# @login_required(login_url="login_user")
-# def cart_add(request, id):
-#     cart = Cart(request)
-#     product = Product.objects.get(id=id)
-#     cart.add(product=product)
-#     return redirect("bill_user_home")
-#
-# @login_required(login_url="login_user")
-# def item_clear(request, id):
-#     cart = Cart(request)
-#     product = Product.objects.get(id=id)
-#     cart.remove(product)
-#     return redirect("cart_detail")
-#
-# @login_required(login_url="login_user")
-# def item_increment(request, id):
-#     cart = Cart(request)
-#     product = Product.objects.get(id=id)
-#     cart.add(product=product)
-#     return redirect("cart_detail")
-#
-# @login_required(login_url="login_user")
-# def item_decrement(request, id):
-#     cart = Cart(request)
-#     product = Product.objects.get(id=id)
-#     cart.decrement(product=product)
-#     return redirect("cart_detail")
-#
-# @login_required(login_url="login_user")
-# def cart_clear(request):
-#     cart = Cart(request)
-#     cart.clear()
-#     return redirect("cart_detail")
-#
-# @login_required(login_url="login_user")
-# def cart_detail(request):
-#     return render(request, 'billing/cart.html')
-#
+
+@admin_required
+def approve_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user.is_active = True
+    user.save()
+    return redirect('dashboard_admin')  # Adjust this to your admin page URL name
+
+
+@admin_required
+def reject_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user.is_active = False
+    user.save()
+    delete_user(request, user_id)
+    return redirect('dashboard_admin')
+
+
+@admin_required
+def delete_user(request, user_id):
+    user = get_object_or_404(User, id=user_id)
+    user.delete()
+    return redirect('dashboard_admin')
+
+
+@login_required
+def submit_feedback(request):
+    if request.method == 'POST':
+        form = UserFeedback(request.POST)
+        if form.is_valid():
+            feedback = form.save(commit=False)
+            feedback.user = request.user
+            feedback.save()
+            return redirect('feedback_thanks')
+    else:
+        form = UserFeedback()
+    return render(request, 'users/submit_feedback.html', {'form': form})
+
+
+@login_required
+def feedback_thanks(request):
+    return render(request, 'users/feedback_thanks.html')
+
+
+@staff_member_required
+def manage_feedback(request):
+    feedback_list = Feedback.objects.all().order_by('-created_at')
+    return render(request, 'admin/manage_feedback.html', {'feedback_list': feedback_list})
+
+
+@admin_required
+def review_feedback(request, feedback_id):
+    feedback = get_object_or_404(Feedback, id=feedback_id)
+    feedback.reviewed = True
+    feedback.save()
+    return redirect('manage_feedback')
+
+
+@admin_required
+def delete_feedback(request, feedback_id):
+    feedback = get_object_or_404(Feedback, id=feedback_id)
+    feedback.delete()
+    return redirect('dashboard_admin')  # Adjust this to your admin page URL name
+
