@@ -7,8 +7,8 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView
-from billing.forms import UserRegisterForm, UserFeedback
-from billing.models import Feedback
+from .forms import UserRegisterForm, UserFeedback, CartItemForm
+from .models import Feedback, Cart, CartItem, Invoice, InvoiceItem
 from product_grocery.models import Product, Category
 
 
@@ -166,7 +166,7 @@ def feedback_thanks(request):
     return render(request, 'users/feedback_thanks.html')
 
 
-@staff_member_required
+@admin_required
 def manage_feedback(request):
     feedback_list = Feedback.objects.all().order_by('-created_at')
     return render(request, 'admin/manage_feedback.html', {'feedback_list': feedback_list})
@@ -186,3 +186,88 @@ def delete_feedback(request, feedback_id):
     feedback.delete()
     return redirect('dashboard_admin')  # Adjust this to your admin page URL name
 
+
+# cart views
+# billing/views.py
+@login_required
+def add_to_cart(request):
+    if request.method == 'POST':
+        form = CartItemForm(request.POST)
+        if form.is_valid():
+            cart, created = Cart.objects.get_or_create(user=request.user)
+            cart_item = form.save(commit=False)
+            cart_item.cart = cart
+            cart_item.save()
+            return redirect('view_cart')
+    else:
+        form = CartItemForm()
+    return render(request, 'billing/add_to_cart.html', {'form': form})
+
+
+@login_required
+def remove_from_cart(request, item_id):
+    cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
+    cart_item.delete()
+    return redirect('view_cart')
+
+
+@login_required
+def view_cart(request):
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_items = CartItem.objects.filter(cart=cart)
+    return render(request, 'billing/view_cart.html', {'cart_items': cart_items})
+
+
+@login_required
+def generate_invoice(request):
+    cart = get_object_or_404(Cart, user=request.user)
+    cart_items = CartItem.objects.filter(cart=cart)
+
+    if cart_items.exists():
+        invoice = Invoice.objects.create(user=request.user, total_amount=0)
+        total_amount = 0
+
+        for item in cart_items:
+            invoice_item = InvoiceItem.objects.create(
+                invoice=invoice,
+                product=item.product,
+                quantity=item.quantity,
+                price=item.product.price * item.quantity
+            )
+            total_amount += invoice_item.price
+
+        invoice.total_amount = total_amount
+        invoice.save()
+
+        cart_items.delete()
+        return render(request, 'billing/invoice.html',
+                      {'invoice': invoice, 'invoice_items': invoice.invoiceitem_set.all()})
+    else:
+        return redirect('view_cart')
+
+
+@login_required
+def invoice_detail(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
+    return render(request, 'billing/invoice_detail.html', {'invoice': invoice})
+
+
+@login_required
+def prepare_bill(request):
+    products = Product.objects.all()
+    cart, created = Cart.objects.get_or_create(user=request.user)
+    cart_items = CartItem.objects.filter(cart=cart)
+    if request.method == 'POST':
+        form = CartItemForm(request.POST)
+        if form.is_valid():
+            cart_item = form.save(commit=False)
+            cart_item.cart = cart
+            cart_item.save()
+            return redirect('prepare_bill')
+    else:
+        form = CartItemForm()
+    return render(request, 'billing/cart.html', {
+        'products': products,
+        'cart_items': cart_items,
+        'form': form,
+    })
