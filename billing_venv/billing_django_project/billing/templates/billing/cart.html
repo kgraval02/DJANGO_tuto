@@ -1,8 +1,9 @@
 {% extends 'billing/main_user_nav.html' %}
+{% load custom_tags %}
 {% block content %}
     <h1>Prepare Bill</h1>
     <div class="product-list">
-        <h2>Products</h2>
+        <h2 class="p-4">Products</h2>
 
         <table class="table table-hover">
           <thead>
@@ -33,15 +34,15 @@
         </table>
     </div>
     <div class="cart">
-        <h2>Cart</h2>
-
-
+        <h2 class="p-4">Collections</h2>
         <table class="table table-hover">
           <thead>
             <tr>
               <th scope="col">#</th>
               <th scope="col">Product</th>
+              <th scope="col">Price</th>
               <th scope="col">Quantity</th>
+              <th scope="col">Amount</th>
               <th scope="col">Action</th>
             </tr>
           </thead>
@@ -50,7 +51,9 @@
             <tr>
                 <th scope="row">{{ forloop.counter }}</th>
                 <td>{{ item.product.name }}</td>
+                <td>{{ item.product.price }}</td>
                 <td>{{ item.quantity }}</td>
+                <td>{{ item.quantity|multiply:item.product.price }}</td>
                 <td>
                     <form action="{% url 'remove_from_cart' item.id %}" method="post">
                         {% csrf_token %}
