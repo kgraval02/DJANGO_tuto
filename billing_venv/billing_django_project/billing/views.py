@@ -271,3 +271,4 @@ def prepare_bill(request):
         'cart_items': cart_items,
         'form': form,
     })
+
