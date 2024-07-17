@@ -1,10 +1,18 @@
 {% extends 'billing/main_user_nav.html' %}
 {% load custom_tags %}
 {% block content %}
+
+    {% if messages %}
+        {% for message in messages %}
+            <div class="alert alert-{{ message.tags }}">
+                {{ message }}
+            </div>
+        {% endfor %}
+    {% endif %}
+
     <h1>Prepare Bill</h1>
     <div class="product-list">
         <h2 class="p-4">Products</h2>
-
         <table class="table table-hover">
           <thead>
             <tr>
@@ -33,6 +41,8 @@
           </tbody>
         </table>
     </div>
+
+    {#collection listing#}
     <div class="cart">
         <h2 class="p-4">Collections</h2>
         <table class="table table-hover">
@@ -67,7 +77,10 @@
 
         <form action="{% url 'generate_invoice' %}" method="post">
             {% csrf_token %}
-            <button class="btn btn-warning" type="submit">Generate Invoice</button>
+            <div class="p-4">Customer Email: <label>
+                <input type="email" name="customer_email" required>
+            </label></div>
+            <button class="my-3 btn btn-warning" type="submit">Generate Invoice</button>
         </form>
     </div>
 {% endblock %}

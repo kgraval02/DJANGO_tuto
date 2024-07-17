@@ -28,6 +28,7 @@ class CartItem(models.Model):
 
 class Invoice(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+    customer_email = models.EmailField(default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
 

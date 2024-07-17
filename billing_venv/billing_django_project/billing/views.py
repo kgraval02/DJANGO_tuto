@@ -1,3 +1,4 @@
+import io
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -5,11 +6,19 @@ from django.contrib import messages
 from django.contrib.auth.models import User
 from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.shortcuts import render, redirect, get_object_or_404
+from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView
 from .forms import UserRegisterForm, UserFeedback, CartItemForm
 from .models import Feedback, Cart, CartItem, Invoice, InvoiceItem
 from product_grocery.models import Product, Category
+from xhtml2pdf import pisa
+from email.mime.application import MIMEApplication
+from django.core.mail import EmailMessage
+from django.template.loader import render_to_string
+from django.conf import settings
+from django.http import JsonResponse
+
 
 
 def home(request):
@@ -224,7 +233,8 @@ def generate_invoice(request):
     cart_items = CartItem.objects.filter(cart=cart)
 
     if cart_items.exists():
-        invoice = Invoice.objects.create(user=request.user, total_amount=0)
+        customer_email = request.POST.get('customer_email')
+        invoice = Invoice.objects.create(user=request.user, total_amount=0, customer_email=customer_email)
         total_amount = 0
 
         for item in cart_items:
@@ -238,7 +248,6 @@ def generate_invoice(request):
 
         invoice.total_amount = total_amount
         invoice.save()
-
         cart_items.delete()
         return render(request, 'billing/invoice.html',
                       {'invoice': invoice, 'invoice_items': invoice.invoiceitem_set.all()})
@@ -272,3 +281,49 @@ def prepare_bill(request):
         'form': form,
     })
 
+
+@login_required
+def send_invoice_email(request, invoice_id):
+    invoice = get_object_or_404(Invoice, id=invoice_id, user=request.user)
+    customer_email = invoice.customer_email
+    subject = 'Invoice from QUICK CART HUB'
+    message = f'Thank you for your purchase.\nYour total billing amount is {invoice.total_amount}.'
+    email_from = settings.EMAIL_HOST_USER
+    recipient_list = [customer_email]
+
+    pdf = render_to_pdf('billing/invoice.html',
+                        {'invoice': invoice, 'invoice_items': invoice.invoiceitem_set.all()})
+
+    if pdf:
+        email = EmailMessage(subject, message, email_from, recipient_list)
+        pdf_attachment = MIMEApplication(pdf, _subtype='pdf')
+        pdf_attachment.add_header('Content-Disposition', 'attachment', filename=f"invoice_{invoice.id}.pdf")
+        email.attach(pdf_attachment)
+
+        try:
+            email.send()
+            return redirect('prepare_bill')
+            # return redirect('prepare_bill')
+        except Exception as e:
+            # content1 = {
+            #     'status': 'error',
+            #     'message': str(e)
+            # }
+            # return render('prepare_bill', content1)
+            return JsonResponse({'status': 'error', 'message': str(e)})
+        else:
+            return JsonResponse({'status': 'error', 'message': 'Failed to generate PDF'})
+
+        # send_mail(subject, message, email_from, recipient_list)
+    return render(request, 'billing/invoice.html',
+                  {'invoice': invoice, 'invoice_items': invoice.invoiceitem_set.all(), 'email_sent': True})
+
+
+def render_to_pdf(template_src, context_dict):
+    template = get_template(template_src)
+    html = template.render(context_dict)
+    result = io.BytesIO()
+    pdf = pisa.pisaDocument(io.BytesIO(html.encode("UTF-8")), result)
+    if not pdf.err:
+        return result.getvalue()
+    return None

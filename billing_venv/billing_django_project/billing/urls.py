@@ -32,6 +32,7 @@ urlpatterns = [
     path('remove_from_cart/<int:item_id>/', b_view.remove_from_cart, name='remove_from_cart'),
     path('invoice/<int:invoice_id>/', b_view.invoice_detail, name='invoice_detail'),
     path('prepare_bill/', b_view.prepare_bill, name='prepare_bill'),
+    path('send-invoice-email/<int:invoice_id>/', b_view.send_invoice_email, name='send_invoice_email'),
 
 ]
 
