@@ -26,12 +26,12 @@ urlpatterns = [
     path('submit_feedback/', b_view.submit_feedback, name='submit_feedback'),
     path('feedback_thanks/', b_view.feedback_thanks, name='feedback_thanks'),
 
-    path('add-to-cart/', b_view.add_to_cart, name='add_to_cart'),
-    path('view-cart/', b_view.view_cart, name='view_cart'),
-    path('generate-invoice/', b_view.generate_invoice, name='generate_invoice'),
-    path('remove-from-cart/<int:item_id>/', b_view.remove_from_cart, name='remove_from_cart'),
+    path('add_to_cart/', b_view.add_to_cart, name='add_to_cart'),
+    path('view_cart/', b_view.view_cart, name='view_cart'),
+    path('generate_invoice/', b_view.generate_invoice, name='generate_invoice'),
+    path('remove_from_cart/<int:item_id>/', b_view.remove_from_cart, name='remove_from_cart'),
     path('invoice/<int:invoice_id>/', b_view.invoice_detail, name='invoice_detail'),
-    path('prepare-bill/', b_view.prepare_bill, name='prepare_bill'),
+    path('prepare_bill/', b_view.prepare_bill, name='prepare_bill'),
 
 ]
 

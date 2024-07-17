@@ -208,7 +208,7 @@ def add_to_cart(request):
 def remove_from_cart(request, item_id):
     cart_item = get_object_or_404(CartItem, id=item_id, cart__user=request.user)
     cart_item.delete()
-    return redirect('view_cart')
+    return redirect('prepare_bill')
 
 
 @login_required
