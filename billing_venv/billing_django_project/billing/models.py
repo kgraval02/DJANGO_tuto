@@ -1,3 +1,4 @@
+from django.conf import settings
 from django.contrib.auth.models import User
 from product_grocery.models import Product, Category
 from django.db import models
@@ -40,6 +41,7 @@ class InvoiceItem(models.Model):
     price = models.DecimalField(max_digits=10, decimal_places=2)
 
 
+# extra modules
 class Album(models.Model):
     title = models.CharField(max_length=30)
     artist = models.CharField(max_length=30)
@@ -57,3 +59,12 @@ class Song(models.Model):
         return self.name
 
 
+class PaymentModel(models.Model):
+    user = models.ForeignKey(settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
+    amount = models.DecimalField(max_digits=10, decimal_places=2)
+    currency = models.CharField(max_length=3, default='INR')
+    status = models.CharField(max_length=20, default='Pending')
+    created_at = models.DateTimeField(auto_now_add=True)
+
+    def __str__(self):
+        return f"Payment {self.id} - {self.user}"

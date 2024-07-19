@@ -1,4 +1,4 @@
-import io
+import stripe
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login
 from django.contrib.auth.decorators import user_passes_test, login_required
@@ -9,16 +9,15 @@ from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import get_template
 from django.urls import reverse_lazy
 from django.views.generic import TemplateView, CreateView
-from .forms import UserRegisterForm, UserFeedback, CartItemForm
+from .forms import UserRegisterForm, UserFeedback, CartItemForm, PaymentForm
 from .models import Feedback, Cart, CartItem, Invoice, InvoiceItem
 from product_grocery.models import Product, Category
 from xhtml2pdf import pisa
+# import ho.pisa as pisa
 from email.mime.application import MIMEApplication
 from django.core.mail import EmailMessage
-from django.template.loader import render_to_string
 from django.conf import settings
 from django.http import JsonResponse
-
 
 
 def home(request):
@@ -197,7 +196,6 @@ def delete_feedback(request, feedback_id):
 
 
 # cart views
-# billing/views.py
 @login_required
 def add_to_cart(request):
     if request.method == 'POST':
@@ -327,3 +325,32 @@ def render_to_pdf(template_src, context_dict):
     if not pdf.err:
         return result.getvalue()
     return None
+
+
+# payment methods
+# Kg@#stripes12345
+
+stripe.api_key = settings.STRIPE_SECRET_KEY
+
+
+def payment_view(request):
+    if request.method == 'POST':
+        form = PaymentForm(request.POST)
+        if form.is_valid():
+            amount = int(form.cleaned_data['amount'] * 100)  # Stripe uses cents
+            try:
+                charge = stripe.Charge.create(
+                    amount=amount,
+                    currency='usd',
+                    description='Payment',
+                    source=request.POST['stripeToken']
+                )
+                # Save payment information to the database
+                # Payment.objects.create(user=request.user, amount=form.cleaned_data['amount'], status='Paid')
+                return redirect('payment_success')
+            except stripe.error.StripeError:
+                return redirect('payment_error')
+    else:
+        form = PaymentForm()
+    return render(request, 'billing/payment.html',
+                  {'form': form, 'stripe_publishable_key': settings.STRIPE_PUBLISHABLE_KEY})
