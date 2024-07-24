@@ -1,6 +1,6 @@
 {% extends "admin/main_admin_nav.html" %}
 {% block content %}
-    <div class="bg-danger">
+    <div class="bg-danger mx-3 mt-5">
         <div class="card container" style="margin-top: auto; height: 100%; width: 100%">
             <h1 class="p-3">ADMIN DASHBOARD</h1><hr><hr>
             <div class="container">
@@ -20,20 +20,35 @@
 
                     <a class="my-2 mx-3 col-md-4 d-flex justify-content-center rounded text-decoration-none bg-success"
                        href="{% url 'usersforadmin' %}">
-                        <button class="mx-3  my-2  btn btn-success align-center">TOTAL ADMINS
+                        <button class="mx-3  my-2  btn btn-success align-center">AVAILABLE USERS
+                            <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ total_users }}</p>
+                        </button>
+                    </a>
+
+                    <a class="my-2 mx-3 col-md-4 d-flex justify-content-center rounded text-decoration-none bg-success"
+                       href="{% url 'usersforadmin' %}">
+                        <button class="mx-3  my-2  btn btn-success align-center">ACTIVE USERS
+                            <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ total_act_users }}</p>
+                        </button>
+                    </a>
+
+                    <a class="my-2 mx-3 col-md-4 d-flex justify-content-center rounded text-decoration-none bg-success"
+                       href="{% url 'usersforadmin' %}">
+                        <button class="mx-3  my-2  btn btn-success align-center">ADMINS
                             <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ total_admins }}</p>
                         </button>
                     </a>
 
                     <a class="my-2 mx-3 col-md-4 d-flex justify-content-center rounded text-decoration-none bg-success"
                        href="{% url 'usersforadmin' %}">
-                        <button class="mx-3  my-2  btn btn-success align-center">TOTAL USERS
-                            <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ total_users }}</p>
+                        <button class="mx-3  my-2  btn btn-success align-center"> BILLING PERSONS
+                            <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ total_biller }}</p>
                         </button>
                     </a>
+
                     <a class="my-2 mx-3 col-md-4 d-flex justify-content-center rounded text-decoration-none bg-success"
                        href="{% url 'usersforadmin' %}">
-                        <button class="mx-3  my-2  btn btn-success align-center">USER REQUESTS
+                        <button class="mx-3  my-2  btn btn-success align-center">PENDING APPROVAL REQUESTS
                             <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ user_requests }}</p>
                         </button>
                     </a>
@@ -45,30 +60,38 @@
                         </button>
                     </a>
 
+                    <a class="my-2 mx-3 col-md-4 d-flex justify-content-center rounded text-decoration-none bg-success"
+                       href="{% url 'manage_feedback' %}">
+                        <button class="mx-3  my-2  btn btn-success align-center">NO. OF ISSUES PENDING TO REVIEW
+                            <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ review_feedback }}</p>
+                        </button>
+                    </a>
+
+
                     <div class="my-2 mx-3 bg-success d-flex rounded justify-content-center text-decoration-none"
                        href="#">
                         <table>
                             <tr>
                                 <td colspan="3" CLASS="text-center">
                                     <button class="mx-3  my-2 btn btn-success">TOTAL BILLED
-                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ raised_issues }}</p>
+                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ invoice_count }}</p>
                                     </button>
                                 </td>
                             </tr>
                             <tr>
                                 <td>
                                     <button class="mx-3  my-2 btn btn-success">TOTAL BILLED TODAY
-                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ raised_issues }}</p>
+                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ invoice_count_today }}</p>
                                     </button>
                                 </td>
                                 <td>
                                     <button class="mx-3  my-2 btn btn-success">TOTAL BILLED THIS MONTH
-                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ raised_issues }}</p>
+                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ invoice_count_this_month }}</p>
                                     </button>
                                 </td>
                                 <td>
                                     <button class="mx-3  my-2 btn btn-success">TOTAL BILLED THIS YEAR
-                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ raised_issues }}</p>
+                                        <p class="bg-warning text-dark py-3 mt-3 border-rounded">{{ invoice_count_this_year }}</p>
                                     </button>
                                 </td>
                             </tr>

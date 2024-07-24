@@ -1,4 +1,6 @@
 from django.contrib import messages
+from django.db.models import Q
+from django.shortcuts import get_object_or_404
 from django.urls import reverse_lazy
 from django.views.generic import ListView, CreateView, UpdateView, DeleteView, DetailView
 from .models import Category, Product
@@ -50,6 +52,28 @@ class ProductListView(ListView):
     model = Product
     template_name = 'products/product_view.html'
     context_object_name = 'products'
+
+    def get_queryset(self):
+        query = self.request.GET.get('q')
+        if query:
+            return Product.objects.filter(Q(name__icontains=query))
+        return Product.objects.all()
+
+
+class FilteredProductListView(ListView):
+    model = Product
+    template_name = 'products/filtered_product.html'
+    context_object_name = 'f_products'
+
+    def get_queryset(self):
+        category_id = self.kwargs.get('category_id')
+        return Product.objects.filter(category_id=category_id)
+
+    def get_context_data(self, **kwargs):
+        context = super().get_context_data(**kwargs)
+        category_id = self.kwargs.get('category_id')
+        context['category'] = get_object_or_404(Category, id=category_id)
+        return context
 
 
 class ProductUpdateView(UpdateView):

@@ -14,8 +14,8 @@
 <body>
     <header>
       <!-- Sidebar -->
-      <nav id="sidebarMenu" class="bg-opacity-50 collapse d-lg-block sidebar collapse bg-white">
-        <div class="position-sticky bg-opacity-50 ">
+      <nav id="sidebarMenu" class="bg-opacity-25 d-lg-block sidebar collapse bg-white">
+        <div class="position-sticky">
           <div class="list-group list-group-flush mx-3 mt-4">
             <a href="{% url 'bill_user_home' %}" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
               <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>DASHBOARD</span>
@@ -42,25 +42,26 @@
           <!-- Toggle button -->
 
           <!-- Logo -->
-            <a class="navbar-brand" href="#">
-                <img src="https://th.bing.com/th/id/OIP.dyH31_g1X78x4tpXsMoK6QHaF7?rs=1&amp;pid=ImgDetMain" height="25"
-                     alt="quick cart hub" loading="lazy"/>
+            <a class= "navbar-brand d-flex" href="{% url 'bill_user_home' %}">
+                <img src="https://th.bing.com/th/id/OIP.dyH31_g1X78x4tpXsMoK6QHaF7?rs=1&amp;pid=ImgDetMain" height= "40"
+                     class="rounded" alt="quick cart hub" loading="lazy"/>
+                <P class="px-2">
+                    <span CLASS="text-success">QUICK</span>
+                    <span class="text-danger">CART</span>
+                    <span class="text-warning">HUB</span></P>
             </a>
-            <form>
-                <a href="{% url 'logout' %}">
-                    <button class="btn-primary " data-mdb-button-init class="navbar-toggler" type="button" data-mdb-collapse-init
-                            data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false"
-                            aria-label="Toggle navigation">LOGOUT</button>
-                </a>
+
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
+                <button type="submit">LOGOUT</button>
             </form>
         </div>
       </nav>
     </header>
 
-    <main style="margin-top: 55px">
-      <div  class="bg-danger container py-3"  style="height: 100%">
+    <main class="bg-warning bg-opacity-25"  style="margin-top: 55px">
+      <div  class="bg-success container bg-opacity-75 py-3" style="height: 100%">
         {% block content %}
-
 
         {% endblock %}
       </div>

@@ -1,9 +1,9 @@
 {% extends "billing/main_user_nav.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div class="m-2 p-2 card" >
-        <div class="content-section">
-            <h1 class="p-2">User Issue</h1>
+    <div class="m-2 p-2" style="height: 100vh;">
+        <div class="content-section card">
+            <h1 class="p-4">User Issue</h1>
             <form method="POST">
                 {% csrf_token %}
                 <fieldset class="form-group container">
@@ -13,7 +13,7 @@
                     </div>
                 </fieldset>
                 <div class="form-group btn-group-toggle d-flex justify-content-center" data-toggle="buttons">
-                    <button class="btn btn-primary"  type="submit">SUBMIT ISSUE</button>
+                    <button class="btn btn-primary" type="submit">SUBMIT ISSUE</button>
                 </div>
                 <br>
             </form>

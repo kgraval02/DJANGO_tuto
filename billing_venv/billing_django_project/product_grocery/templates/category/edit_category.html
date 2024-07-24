@@ -2,7 +2,7 @@
 {% extends "main_product.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div>
+    <div class=" bg-danger bg-opacity-25 card p-4">
         <h2 class="p-2"><b>EDIT CATEGORY PAGE</b></h2><hr>
 {#        <p> {{request.get_full_path}} </p>#}
         <form method="POST" class="d-flex flex-column">
@@ -10,9 +10,9 @@
             <fieldset class="form-group container">
                 {{ form|crispy }}
             </fieldset>
-            <div class="justify-content-between">
+            <div class="d-flex justify-content-around">
                 <button class="btn btn-outline-success my-3" style="width: 300px" type="submit" href="/">DONE</button>
-                <button class="btn btn-outline-success my-3" style="width: 300px" type="reset" href="{% url 'view_category' %}">CANCEL</button>
+                <button class="btn btn-outline-success my-3" style="width: 300px" type="submit" href="{% url 'view_category' %}">CANCEL</button>
             </div>
         </form>
     </div>

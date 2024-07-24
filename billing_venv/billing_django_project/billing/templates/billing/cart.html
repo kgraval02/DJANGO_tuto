@@ -9,78 +9,93 @@
             </div>
         {% endfor %}
     {% endif %}
+    <div class="p-3">
+        <div class="d-flex justify-content-between">
+            <h1>Prepare Bill</h1>
+            <!-- search bar -->
+            <form method="GET" action="{% url 'prepare_bill' %}">
+                <label>
+                    <input type="text" name="n" placeholder="Search by name"
+                           value="{{ request.GET.n|default_if_none:'' }}">
+                </label>
+                <button type="submit">Search</button>
+            </form>
+            <!-- End search bar -->
+        </div>
+        <div class="product-list">
+            <h2 class="p-4">Products</h2>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Name</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for product in products %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ product.name }}</td>
+                        <td>{{ product.price }}</td>
+                        <td>
+                            <form action="{% url 'prepare_bill' %}" method="post">
+                                {% csrf_token %}
+                                <input type="hidden" name="product" value="{{ product.id }}">
+                                <input type="number" name="quantity" value="0">
+                                <button type="submit">Add to Cart</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
+        </div>
 
-    <h1>Prepare Bill</h1>
-    <div class="product-list">
-        <h2 class="p-4">Products</h2>
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Name</th>
-              <th scope="col">Price</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for product in products %}
-            <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ product.name }}</td>
-                <td>{{ product.price }}</td>
-                <td>
-                    <form action="{% url 'prepare_bill' %}" method="post">
-                        {% csrf_token %}
-                        <input type="hidden" name="product" value="{{ product.id }}">
-                        <input type="number" name="quantity" value="0">
-                        <button type="submit">Add to Cart</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
-    </div>
+        {#collection listing#}
+        <div class="cart">
+            <h2 class="p-4">Collections</h2>
+            <table class="table table-hover">
+                <thead>
+                <tr>
+                    <th scope="col">#</th>
+                    <th scope="col">Product</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Amount</th>
+                    <th scope="col">Action</th>
+                </tr>
+                </thead>
+                <tbody>
+                {% for item in cart_items %}
+                    <tr>
+                        <th scope="row">{{ forloop.counter }}</th>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.product.price }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.quantity|multiply:item.product.price }}</td>
+                        <td>
+                            <form action="{% url 'remove_from_cart' item.id %}" method="post">
+                                {% csrf_token %}
+                                <button type="submit">Remove</button>
+                            </form>
+                        </td>
+                    </tr>
+                {% endfor %}
+                </tbody>
+            </table>
 
-    {#collection listing#}
-    <div class="cart">
-        <h2 class="p-4">Collections</h2>
-        <table class="table table-hover">
-          <thead>
-            <tr>
-              <th scope="col">#</th>
-              <th scope="col">Product</th>
-              <th scope="col">Price</th>
-              <th scope="col">Quantity</th>
-              <th scope="col">Amount</th>
-              <th scope="col">Action</th>
-            </tr>
-          </thead>
-          <tbody>
-            {% for item in cart_items %}
-            <tr>
-                <th scope="row">{{ forloop.counter }}</th>
-                <td>{{ item.product.name }}</td>
-                <td>{{ item.product.price }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.quantity|multiply:item.product.price }}</td>
-                <td>
-                    <form action="{% url 'remove_from_cart' item.id %}" method="post">
-                        {% csrf_token %}
-                        <button type="submit">Remove</button>
-                    </form>
-                </td>
-            </tr>
-            {% endfor %}
-          </tbody>
-        </table>
+            <form action="{% url 'generate_invoice' %}" method="post">
+                {% csrf_token %}
+                <div class="p-4 d-flex justify-content-around">
+                    Customer Name: <label><input type="text" name="customer_name" required></label>
+                    Customer Email: <label><input type="email" name="customer_email" required></label>
+                    Customer Mo. Num: <label><input type="tel" name="customer_mobile" required></label>
+                </div>
 
-        <form action="{% url 'generate_invoice' %}" method="post">
-            {% csrf_token %}
-            <div class="p-4">Customer Email: <label>
-                <input type="email" name="customer_email" required>
-            </label></div>
-            <button class="my-3 btn btn-warning" type="submit">Generate Invoice</button>
-        </form>
+                <button class="my-3 btn btn-warning" type="submit">Generate Invoice</button>
+            </form>
+        </div>
     </div>
 {% endblock %}

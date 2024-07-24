@@ -11,67 +11,138 @@
             integrity="sha384-YvpcrYf0tY3lHB60NNkmXc5s9fDVZLESaAA55NDzOxhy9GkcIdslK1eN7N6jIeHz" crossorigin="anonymous"></script>
 </head>
 <body class="container bg-warning bg-opacity-50">
-        <!--Main Navigation-->
-        <header>
-          <!-- Sidebar -->
-{#          <nav id="sidebarMenu" class="bg-opacity-50 collapse d-lg-block sidebar collapse bg-white">#}
-{#            <div class="position-sticky bg-opacity-50 ">#}
-{#              <div class="list-group list-group-flush mx-3 mt-4">#}
-{#                <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">#}
-{#                  <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>CATEGORY</span>#}
-{#                </a>#}
-{#                <a href="#" class="list-group-item list-group-item-action py-2 ripple">#}
-{#                  <i class="fas fa-chart-area fa-fw me-3"></i><span>PRODUCTS</span>#}
-{#                </a>#}
-{#                <a href="#" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">#}
-{#                  <i class="fas fa-tachometer-alt fa-fw me-3"></i><span></span>#}
-{#                </a>#}
-{#                <a href="#" class="list-group-item list-group-item-action py-2 ripple">#}
-{#                  <i class="fas fa-chart-area fa-fw me-3"></i><span></span>#}
-{#                </a>#}
-{##}
-{#              </div>#}
-{#            </div>#}
-{#          </nav>#}
-          <!-- Sidebar -->
+    <!--Main Navigation-->
+    <header>
+      <!-- Navbar -->
+      <nav id="main-navbar" class="navbar navbar-expand-lg bg-dark fixed-top">
+        <!-- Container wrapper -->
+        <div class="container container-fluid">
+          <!-- Toggle button -->
+          <button data-mdb-button-init class="navbar-toggler" type="button" data-mdb-collapse-init
+                  data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
+            <i class="fas fa-bars"></i>
+          </button>
 
-          <!-- Navbar -->
-          <nav id="main-navbar" class="navbar navbar-expand-lg navbar-light bg-white fixed-top">
-            <!-- Container wrapper -->
-            <div class="container container-fluid">
-              <!-- Toggle button -->
-              <button data-mdb-button-init class="navbar-toggler" type="button" data-mdb-collapse-init
-                      data-mdb-target="#sidebarMenu" aria-controls="sidebarMenu" aria-expanded="false" aria-label="Toggle navigation">
-                <i class="fas fa-bars"></i>
-              </button>
+            {% if request.user.is_superuser %}
+                <!-- Logo -->
+                <a class="d-flex navbar-brand text-danger" href="{% url 'dashboard_admin' %}">
+                    <img src="https://th.bing.com/th/id/OIP.dyH31_g1X78x4tpXsMoK6QHaF7?rs=1&amp;pid=ImgDetMain"height="40" class="rounded"
+                         alt="quick cart hub" loading="lazy"/>
+                    <P class="px-2">
+                        <span CLASS="text-success">QUICK</span>
+                        <span class="text-danger">CART</span>
+                        <span class="text-warning">HUB</span></P>
+                </a>
+            {% else %}
+                <!-- Logo -->
+                <a class="d-flex navbar-brand text-danger" href="{% url 'bill_user_home' %}">
+                    <img src="https://th.bing.com/th/id/OIP.dyH31_g1X78x4tpXsMoK6QHaF7?rs=1&amp;pid=ImgDetMain"height="40" class="rounded"
+                         alt="quick cart hub" loading="lazy"/>
+                    <P class="px-2">
+                        <span CLASS="text-success">QUICK</span>
+                        <span class="text-danger">CART</span>
+                        <span class="text-warning">HUB</span></P>
+                </a>
 
-              <!-- Logo -->
-              <a class="navbar-brand text-danger" href="#">
-                <img src="https://th.bing.com/th/id/OIP.dyH31_g1X78x4tpXsMoK6QHaF7?rs=1&amp;pid=ImgDetMain" height="25"
-                  alt="quick cart hub" loading="lazy"/>
-              </a>
+            {% endif %}
 
-                <form method="post" action="{% url 'logout' %}">
-                    {% csrf_token %}
 
-                    <button type="submit">logout</button>
-                </form>
-            </div>
-            <!-- Container wrapper -->
-          </nav>
-          <!-- Navbar -->
-        </header>
-        <!--Main Navigation-->
+            <form method="post" action="{% url 'logout' %}">
+                {% csrf_token %}
 
-        <!--Main layout-->
-        <main style="margin-top: 58px;">
-          <div  class="bg-danger bg-opacity-50 container"  style="margin-top: 100px;">
-            {% block content %}
+                <button type="submit">LOGOUT</button>
+            </form>
+        </div>
+        <!-- Container wrapper -->
+      </nav>
+      <!-- Navbar -->
+    {% if user.is_superuser %}
+              <!-- Sidebar -->
+      <nav id="sidebarMenu" class="bg-opacity-50 collapse d-lg-block sidebar collapse bg-white">
+        <div class="position-sticky bg-opacity-50 ">
+          <div class="list-group list-group-flush mx-3 mt-4">
+            <a href="{% url 'dashboard_admin' %}" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+              <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>DASHBOARD</span>
+            </a>
+              <HR>
+{#              manage categpry#}
+              <div>MANAGE CATEGORY
+                <a href="{% url 'add_category' %}" class="list-group-item list-group-item-action py-2 ripple">
+                  <i class="fas fa-chart-area fa-fw me-3"></i><span>ADD CATEGORY</span>
+                </a>
+                <a href="{% url 'view_category' %}" class="list-group-item list-group-item-action py-2 ripple">
+                    <i class="fas fa-chart-area fa-fw me-3"></i><span>UPDATE
+                </span>
+                </a>
+              <a href="{% url 'view_category' %}" class="list-group-item list-group-item-action py-2 ripple">
+                  <i class="fas fa-chart-area fa-fw me-3"></i><span>DELETE CATEGORY</span>
+                </a></div>
+              {#manage product#}
+              <div class="pt-3">MANAGE PRODUCT
+                <a href="{% url 'add_product' %}#" class="list-group-item list-group-item-action py-2 ripple">
+                  <i class="fas fa-chart-area fa-fw me-3"></i><span>ADD PRODUCT</span>
+                </a>
+                <a href="{% url 'view_product' %}" class="list-group-item list-group-item-action py-2 ripple">
+                    <i class="fas fa-chart-area fa-fw me-3"></i><span>UPDATE PRODUCT</span>
+                </a>
+              <a href="{% url 'view_product' %}" class="list-group-item list-group-item-action py-2 ripple">
+                  <i class="fas fa-chart-area fa-fw me-3"></i><span>DELETE PRODUCT</span>
+                </a></div>
 
-            {% endblock %}
+{#                manage user#}
+              <div CLASS="pt-3">MANAGE USERS
+                <a href="{% url 'register_user' %}" class="list-group-item list-group-item-action py-2 ripple">
+                  <i class="fas fa-chart-area fa-fw me-3"></i><span>ADD USER</span>
+                </a>
+                <a href="{% url 'usersforadmin' %}" class="list-group-item list-group-item-action py-2 ripple">
+                    <i class="fas fa-chart-area fa-fw me-3"></i><span>APPROVE USER</span>
+                </a>
+              <a href="{% url 'usersforadmin' %}" class="list-group-item list-group-item-action py-2 ripple">
+                  <i class="fas fa-chart-area fa-fw me-3"></i><span>DELETE USER</span>
+                </a></div>
+{#                manage issue#}
+              <div CLASS="pt-3">MANAGE ISSUE
+                <a href="{% url 'manage_feedback' %}" class="list-group-item list-group-item-action py-2 ripple">
+                    <i class="fas fa-chart-area fa-fw me-3"></i><span>VIEW ISSUES</span>
+                </a>
           </div>
-        </main>
-        <!--Main layout-->
+        </div>
+      </nav>
+    {% else %}
+              <!-- Sidebar -->
+      <nav id="sidebarMenu" class="bg-opacity-50 collapse d-lg-block sidebar collapse bg-white">
+        <div class="position-sticky bg-opacity-50 ">
+          <div class="list-group list-group-flush mx-3 mt-4">
+            <a href="{% url 'bill_user_home' %}" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+              <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>DASHBOARD</span>
+            </a>
+            <a href="{% url 'view_category' %}" class="list-group-item list-group-item-action py-2 ripple" aria-current="true">
+              <i class="fas fa-tachometer-alt fa-fw me-3"></i><span>VIEW CATEGORY</span>
+            </a>
+            <a href="{% url 'view_product' %}" class="list-group-item list-group-item-action py-2 ripple">
+              <i class="fas fa-chart-area fa-fw me-3"></i><span>VIEW PRODUCTS</span>
+            </a>
+            <a href="{% url 'prepare_bill' %}" class="list-group-item list-group-item-action py-2 ripple">
+              <i class="fas fa-chart-area fa-fw me-3"></i><span> PREPARE BILL </span>
+            </a>
+            <a href="{% url 'submit_feedback' %}" class="list-group-item list-group-item-action py-2 ripple">
+              <i class="fas fa-chart-area fa-fw me-3"></i><span> Generate Issue </span>
+            </a>
 
+          </div>
+        </div>
+      </nav>
+    {% endif %}
+
+    </header>
+    <!--Main layout-->
+    <main style="margin-top: 58px;">
+      <div  class="bg-opacity-50 container"  style="margin-top: 100px;">
+        {% block content %}
+
+        {% endblock %}
+      </div>
+    </main>
+    <!--Main layout-->
 </body>
 </html>

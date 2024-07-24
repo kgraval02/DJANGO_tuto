@@ -33,3 +33,8 @@ register = template.Library()
 @register.filter
 def multiply(value, arg):
     return value * arg
+
+
+@register.filter
+def sum_total(queryset):
+    return sum(item.total for item in queryset)

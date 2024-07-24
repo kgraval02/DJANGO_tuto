@@ -1,3 +1,4 @@
+import io
 import stripe
 from django.contrib.admin.views.decorators import staff_member_required
 from django.contrib.auth import login
@@ -8,12 +9,12 @@ from django.contrib.auth.views import LoginView, LogoutView, PasswordChangeView
 from django.shortcuts import render, redirect, get_object_or_404
 from django.template.loader import get_template
 from django.urls import reverse_lazy
+from django.utils import timezone
 from django.views.generic import TemplateView, CreateView
 from .forms import UserRegisterForm, UserFeedback, CartItemForm, PaymentForm
 from .models import Feedback, Cart, CartItem, Invoice, InvoiceItem
 from product_grocery.models import Product, Category
 from xhtml2pdf import pisa
-# import ho.pisa as pisa
 from email.mime.application import MIMEApplication
 from django.core.mail import EmailMessage
 from django.conf import settings
@@ -53,13 +54,27 @@ class AdminDashboardView(TemplateView):
     template_name = 'admin/dashboard_admin.html'
 
     def get_context_data(self, **kwargs):
+        today = timezone.now().date()
+        current_month = today.month
+        current_year = today.year
+
         context = super().get_context_data(**kwargs)
         context['total_categories'] = Category.objects.count()
         context['total_products'] = Product.objects.count()
+        context['total_users'] = User.objects.count()
+        context['total_act_users'] = User.objects.filter(is_active=True).count()
         context['total_admins'] = User.objects.filter(is_staff=True).count()
-        context['total_users'] = User.objects.filter(is_staff=False, is_active=True).count()
+        context['total_biller'] = User.objects.filter(is_staff=False, is_active=True).count()
         context['user_requests'] = User.objects.filter(is_active=False, is_staff=False).count()
         context['raised_issues'] = Feedback.objects.count()
+        context['review_feedback'] = Feedback.objects.filter(reviewed=False).count()
+        context['raised_issues'] = Feedback.objects.count()
+        context['invoice_count'] = Invoice.objects.count()
+        context['invoice_count_today'] = Invoice.objects.filter(created_at__date=today).count()
+        context['invoice_count_this_month'] = Invoice.objects.filter(created_at__year=current_year,
+                                                                     created_at__month=current_month).count()
+        context['invoice_count_this_year'] = Invoice.objects.filter(created_at__year=current_year).count()
+
         return context
 
 
@@ -205,7 +220,7 @@ def add_to_cart(request):
             cart_item = form.save(commit=False)
             cart_item.cart = cart
             cart_item.save()
-            return redirect('view_cart')
+            return redirect('generate_invoice')
     else:
         form = CartItemForm()
     return render(request, 'billing/add_to_cart.html', {'form': form})
@@ -231,8 +246,13 @@ def generate_invoice(request):
     cart_items = CartItem.objects.filter(cart=cart)
 
     if cart_items.exists():
+
+        customer_name = request.POST.get('customer_name')
+        customer_mobile = request.POST.get('customer_mobile')
         customer_email = request.POST.get('customer_email')
-        invoice = Invoice.objects.create(user=request.user, total_amount=0, customer_email=customer_email)
+        invoice = Invoice.objects.create(user=request.user, total_amount=0, customer_email=customer_email,
+                                         customer_name=customer_name,
+                                         customer_mobile=customer_mobile)
         total_amount = 0
 
         for item in cart_items:
@@ -261,7 +281,11 @@ def invoice_detail(request, invoice_id):
 
 @login_required
 def prepare_bill(request):
-    products = Product.objects.all()
+    query = request.GET.get('n', '')
+    if query:
+        products = Product.objects.filter(name__icontains=query)
+    else:
+        products = Product.objects.all()
     cart, created = Cart.objects.get_or_create(user=request.user)
     cart_items = CartItem.objects.filter(cart=cart)
     if request.method == 'POST':
@@ -301,7 +325,6 @@ def send_invoice_email(request, invoice_id):
         try:
             email.send()
             return redirect('prepare_bill')
-            # return redirect('prepare_bill')
         except Exception as e:
             # content1 = {
             #     'status': 'error',

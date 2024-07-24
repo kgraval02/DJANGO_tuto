@@ -1,25 +1,29 @@
-{% extends "base.html" %}
+{% extends "billing/view_cart.html" %}
 
 {% block content %}
     <div class="p-4 m-4">
         <h1>Invoice #{{ invoice.id }}</h1>
-        <p>Date: {{ invoice.created_at }}</p>
-        <table>
-            <tr>
-                <th>Product</th>
-                <th>Quantity</th>
-                <th>Price</th>
-                <th>Total</th>
-            </tr>
-            {% for item in invoice.items.all %}
-            <tr>
-                <td>{{ item.product.name }}</td>
-                <td>{{ item.quantity }}</td>
-                <td>{{ item.price }}</td>
-                <td>{{ item.total }}</td>
-            </tr>
-            {% endfor %}
+        <table class="table">
+            <thead>
+                <tr>
+                    <th scope="col">Product</th>
+                    <th scope="col">Quantity</th>
+                    <th scope="col">Price</th>
+                    <th scope="col">Total</th>
+                </tr>
+            </thead>
+            <tbody>
+                {% for item in invoice.items.all %}
+                    <tr>
+                        <td>{{ item.product.name }}</td>
+                        <td>{{ item.quantity }}</td>
+                        <td>{{ item.price }}</td>
+                        <td>{{ item.total }}</td>
+                    </tr>
+                {% endfor %}
+            </tbody>
         </table>
-        <p>Total: {{ invoice.items.all|sum:'total' }}</p>
+        <p>Date: {{ invoice.created_at }}</p>
+        <p>Total: {{ invoice.items.all|sum_total  }}</p>
     </div>
 {% endblock %}

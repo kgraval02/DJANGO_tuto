@@ -70,9 +70,13 @@
           <!-- Toggle button -->
 
           <!-- Logo -->
-            <a class="navbar-brand" href="#">
-                <img src="https://th.bing.com/th/id/OIP.dyH31_g1X78x4tpXsMoK6QHaF7?rs=1&amp;pid=ImgDetMain" height="25"
+            <a class="navbar-brand d-flex" href="{% url 'dashboard_admin' %}">
+                <img src="https://th.bing.com/th/id/OIP.dyH31_g1X78x4tpXsMoK6QHaF7?rs=1&amp;pid=ImgDetMain" height="40" class="rounded"
                      alt="quick cart hub" loading="lazy"/>
+                <P class="px-2">
+                    <span CLASS="text-success">QUICK</span>
+                    <span class="text-danger">CART</span>
+                    <span class="text-warning">HUB</span></P>
             </a>
             <form method="post" action="{% url 'logout' %}">
                 {% csrf_token %}

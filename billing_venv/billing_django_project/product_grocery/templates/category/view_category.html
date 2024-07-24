@@ -1,20 +1,35 @@
 {% extends "main_product.html" %}
 {% load crispy_forms_tags %}
 {% block content %}
-    <div>
+    <div class="p-3 bg-danger bg-opacity-25 card">
         <h1><b>VIEW CATEGORY PAGE</b></h1><hr>
         <div class="py-3">
-            <ul>
+
+            <table class="table table-hover">
+              <thead>
+                <tr>
+                  <th scope="col"></th>
+                  {% if user.is_superuser %}
+                    <th scope="col">Category Names</th>
+                    <th scope="col" colspan="2" class="text-center">Actions</th>
+                  {% else %}
+                    <th scope="col" colspan="3">Category Names</th>
+                  {% endif %}
+                </tr>
+              </thead>
+              <tbody>
                 {% for category in categories %}
-                    <div class="py-3 d-flex justify-content-between">
-                        <li><a class="text-decoration-none text-dark" href="#">{{ category.name }}</a></li>
+                    <tr>
+                      <th scope="row">{{ forloop.counter }}</th>
+                      <td><a class="text-decoration-none text-dark" href="{% url 'f_product' category.id %}">{{ category.name }}</a></td>
                         {% if user.is_superuser %}
-                            <a href="{% url 'edit_category' category.id %}"><button class="btn btn-light"> EDIT </button></a>
-                            <a href="{% url 'delete_category' category.id %}"><button class="btn btn-light"> DELETE </button></a>
+                            <td class=" text-center"><a class="mx-3" href="{% url 'edit_category' category.id %}"><button class="btn btn-light"> EDIT </button></a>
+                                <a class=" mx-3" href="{% url 'delete_category' category.id %}"><button class="btn btn-light"> DELETE </button></a></td>
                         {% endif %}
-                    </div>
+                    </tr>
                 {% endfor %}
-            </ul><hr>
+              </tbody>
+            </table><hr>
             <div class="d-flex justify-content-between">
                 {% if user.is_superuser %}
                     <a href="{% url 'dashboard_admin' %}"><button class="btn btn-light"> HOME </button></a>

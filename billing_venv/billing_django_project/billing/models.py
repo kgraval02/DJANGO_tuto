@@ -1,3 +1,5 @@
+import uuid
+
 from django.conf import settings
 from django.contrib.auth.models import User
 from product_grocery.models import Product, Category
@@ -29,9 +31,15 @@ class CartItem(models.Model):
 
 class Invoice(models.Model):
     user = models.ForeignKey(User, on_delete=models.CASCADE)
+
+    customer_name = models.CharField(max_length=255, default=None)
+    customer_mobile = models.CharField(max_length=15, default=None)
     customer_email = models.EmailField(default=None)
     created_at = models.DateTimeField(auto_now_add=True)
     total_amount = models.DecimalField(max_digits=10, decimal_places=2)
+
+    def __init__(self, *args, **kwargs):
+        super().__init__(*args, **kwargs)
 
 
 class InvoiceItem(models.Model):
@@ -39,24 +47,6 @@ class InvoiceItem(models.Model):
     product = models.ForeignKey(Product, on_delete=models.CASCADE)
     quantity = models.PositiveIntegerField()
     price = models.DecimalField(max_digits=10, decimal_places=2)
-
-
-# extra modules
-class Album(models.Model):
-    title = models.CharField(max_length=30)
-    artist = models.CharField(max_length=30)
-    genre = models.CharField(max_length=30)
-
-    def __str__(self):
-        return self.title
-
-
-class Song(models.Model):
-    name = models.CharField(max_length=100)
-    album = models.ForeignKey(Album, on_delete=models.CASCADE)
-
-    def __str__(self):
-        return self.name
 
 
 class PaymentModel(models.Model):
